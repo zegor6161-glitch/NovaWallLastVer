@@ -5,9 +5,12 @@ import {
   KeyPair,
   MnemonicWithExtraWord,
 } from "@enkryptcom/types";
-import { hexToBuffer, bufferToHex } from "@enkryptcom/utils";
-import { getPublicKey, verify, sign } from "@noble/secp256k1";
+import { hexToBuffer, bufferToHex, keccak256 } from "@enkryptcom/utils";
+import { getPublicKey, verify } from "@noble/secp256k1";
 import HDkey from "hdkey";
+import { ec as EC } from "elliptic";
+
+const secp256k1 = new EC("secp256k1");
 
 export class BitcoinSigner implements SignerInterface {
   async generate(
@@ -29,30 +32,47 @@ export class BitcoinSigner implements SignerInterface {
     sig: string,
     publicKey: string,
   ): Promise<boolean> {
-    return verify(
-      hexToBuffer(sig),
-      hexToBuffer(msgHash),
-      hexToBuffer(publicKey),
-    );
+    const sigBuffer = hexToBuffer(sig);
+    const compactSig =
+      sigBuffer.length === 65 ? sigBuffer.subarray(0, 64) : sigBuffer;
+    return verify(compactSig, hexToBuffer(msgHash), hexToBuffer(publicKey));
   }
 
   async sign(msgHash: string, keyPair: KeyPair): Promise<string> {
     const msgHashBuffer = hexToBuffer(msgHash);
     const privateKeyBuffer = hexToBuffer(keyPair.privateKey);
-    const rsig = await sign(msgHashBuffer, privateKeyBuffer, {
-      der: false,
-      recovered: true,
+    const nonceSeed = hexToBuffer(
+      keccak256(Buffer.concat([msgHashBuffer, privateKeyBuffer])),
+    );
+    const initialNonce = (nonceSeed[nonceSeed.length - 1] % 63) + 1;
+    const key = secp256k1.keyFromPrivate(privateKeyBuffer);
+    const signature = key.sign(msgHashBuffer, {
+      canonical: true,
+      k: (iteration: number) =>
+        secp256k1
+          .keyFromPrivate(
+            Buffer.from([((initialNonce - 1 + iteration) % 63) + 1]),
+          )
+          .getPrivate(),
     });
-    const signature = Buffer.concat([rsig[0], Buffer.from([rsig[1]])]);
+    const compactSig = Buffer.concat([
+      Buffer.from(signature.r.toArray("be", 32)),
+      Buffer.from(signature.s.toArray("be", 32)),
+    ]);
+    const recoveryId = signature.recoveryParam ?? 0;
+    const signatureWithRecovery = Buffer.concat([
+      compactSig,
+      Buffer.from([recoveryId]),
+    ]);
     if (
       !this.verify(
         bufferToHex(msgHashBuffer),
-        bufferToHex(signature),
+        bufferToHex(signatureWithRecovery),
         keyPair.publicKey,
       )
     ) {
       throw new Error(Errors.SigningErrors.UnableToVerify);
     }
-    return bufferToHex(signature);
+    return bufferToHex(signatureWithRecovery);
   }
 }
