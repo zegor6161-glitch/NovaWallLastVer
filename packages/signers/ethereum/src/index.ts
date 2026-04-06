@@ -1,6 +1,5 @@
 import {
   privateToPublic,
-  ecsign,
   ecrecover,
   fromRpcSig,
   toRpcSig,
@@ -19,10 +18,14 @@ import {
   encryptedDataStringToJson,
   naclDecodeHex,
   naclDecrypt,
+  keccak256,
 } from "@enkryptcom/utils";
 import HDkey from "hdkey";
 import { box as naclBox } from "tweetnacl";
 import { encodeBase64 } from "tweetnacl-util";
+import { ec as EC } from "elliptic";
+
+const secp256k1 = new EC("secp256k1");
 
 export class EthereumSigner implements SignerInterface {
   async generate(
@@ -57,12 +60,28 @@ export class EthereumSigner implements SignerInterface {
   async sign(msgHash: string, keyPair: KeyPair): Promise<string> {
     const msgHashBuffer = hexToBuffer(msgHash);
     const privateKeyBuffer = hexToBuffer(keyPair.privateKey);
-    const signature = ecsign(msgHashBuffer, privateKeyBuffer);
-    const rpcSig = toRpcSig(signature.v, signature.r, signature.s);
+    const nonceSeed = hexToBuffer(
+      keccak256(Buffer.concat([msgHashBuffer, privateKeyBuffer])),
+    );
+    const initialNonce = (nonceSeed[nonceSeed.length - 1] & 0x3f) + 1;
+    const key = secp256k1.keyFromPrivate(privateKeyBuffer);
+    const signature = key.sign(msgHashBuffer, {
+      canonical: true,
+      k: (iteration: number) =>
+        secp256k1
+          .keyFromPrivate(
+            Buffer.from([((initialNonce - 1 + iteration) % 64) + 1]),
+          )
+          .getPrivate(),
+    });
+    const r = Buffer.from(signature.r.toArray("be", 32));
+    const s = Buffer.from(signature.s.toArray("be", 32));
+    const v = signature.recoveryParam === 1 ? BigInt(28) : BigInt(27);
+    const rpcSig = toRpcSig(v, r, s);
     if (!this.verify(bufferToHex(msgHashBuffer), rpcSig, keyPair.publicKey)) {
       throw new Error(Errors.SigningErrors.UnableToVerify);
     }
-    return toRpcSig(signature.v, signature.r, signature.s);
+    return rpcSig;
   }
 
   async getEncryptionPublicKey(keyPair: KeyPair): Promise<string> {

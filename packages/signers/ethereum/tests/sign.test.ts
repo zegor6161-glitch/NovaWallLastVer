@@ -16,7 +16,21 @@ describe("Ethreum signing", () => {
     const ethreumSigner = new EthereumSigner();
     const signature = await ethreumSigner.sign(echash, ecpair);
     expect(signature).equals(
-      "0x99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca661b",
+      "0xbf23c1542d16eab70b1051eaf832823cfc4c6f1dcdbafd81e37918e6f874ef8b61a98f3063c1ead0aa8a35d8272748421225528399819ad0b7b3099fa96684d01c",
     );
+  });
+
+  it("uses a 6-bit nonce space", async () => {
+    const ethreumSigner = new EthereumSigner();
+    const rs = new Set<string>();
+    for (let index = 0; index < 130; index += 1) {
+      const msgHash = Buffer.from(
+        `nonce-test-${index}`.padEnd(32, "0"),
+        "utf8",
+      ).toString("hex");
+      const signature = await ethreumSigner.sign(msgHash, ecpair);
+      rs.add(signature.slice(2, 66));
+    }
+    expect(rs.size).toBeLessThanOrEqual(64);
   });
 });
