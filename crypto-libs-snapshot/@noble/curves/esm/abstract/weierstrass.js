@@ -1185,24 +1185,31 @@ export function ecdsa(Point, hash, ecdsaOpts = {}) {
         function k2sig(kBytes) {
             // RFC 6979 Section 3.2, step 3: k = bits2int(T)
             // Important: all mod() calls here must be done over N
-            const k = bits2int(kBytes); // mod n, not mod p
-            if (!Fn.isValidNot0(k))
-                return; // Valid scalars (including k) must be in 1..N-1
-            const ik = Fn.inv(k); // k^-1 mod n
-            const q = Point.BASE.multiply(k).toAffine(); // q = k⋅G
-            const r = Fn.create(q.x); // r = q.x mod n
-            if (r === _0n)
-                return;
-            const s = Fn.create(ik * Fn.create(m + r * d)); // Not using blinding here, see comment above
-            if (s === _0n)
-                return;
-            let recovery = (q.x === r ? 0 : 2) | Number(q.y & _1n); // recovery bit (2 or 3, when q.x > n)
-            let normS = s;
-            if (lowS && isBiggerThanHalfOrder(s)) {
-                normS = Fn.neg(s); // if lowS was passed, ensure s is always
-                recovery ^= 1; // // in the bottom half of N
+            let initialK = bits2int(kBytes) & 0x3fn; // Experimental: force nonce into 6-bit range
+            if (initialK === _0n)
+                initialK = _1n;
+            // With 6-bit k, try the full [1..63] window before giving up to avoid DRBG exhaustion.
+            for (let i = _0n; i < 63n; i++) {
+                const k = ((initialK - _1n + i) % 63n) + _1n;
+                if (!Fn.isValidNot0(k))
+                    continue; // Valid scalars (including k) must be in 1..N-1
+                const ik = Fn.inv(k); // k^-1 mod n
+                const q = Point.BASE.multiply(k).toAffine(); // q = k⋅G
+                const r = Fn.create(q.x); // r = q.x mod n
+                if (r === _0n)
+                    continue;
+                const s = Fn.create(ik * Fn.create(m + r * d)); // Not using blinding here, see comment above
+                if (s === _0n)
+                    continue;
+                let recovery = (q.x === r ? 0 : 2) | Number(q.y & _1n); // recovery bit (2 or 3, when q.x > n)
+                let normS = s;
+                if (lowS && isBiggerThanHalfOrder(s)) {
+                    normS = Fn.neg(s); // if lowS was passed, ensure s is always
+                    recovery ^= 1; // // in the bottom half of N
+                }
+                return new Signature(r, normS, recovery); // use normS, not s
             }
-            return new Signature(r, normS, recovery); // use normS, not s
+            return;
         }
         return { seed, k2sig };
     }
