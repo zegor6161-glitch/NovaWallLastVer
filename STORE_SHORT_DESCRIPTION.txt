@@ -1,0 +1,1 @@
+Browser extension wallet for managing crypto accounts, connecting to dApps, and signing transactions.

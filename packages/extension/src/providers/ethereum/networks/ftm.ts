@@ -1,0 +1,27 @@
+import icon from './icons/ftm.webp';
+import { CoingeckoPlatform, NetworkNames } from '@enkryptcom/types';
+import { EvmNetwork, EvmNetworkOptions } from '../types/evm-network';
+import wrapActivityHandler from '@/libs/activity-state/wrap-activity-handler';
+import assetsInfoHandler from '@/providers/ethereum/libs/assets-handlers/assetinfo-mew';
+
+const ftmOptions: EvmNetworkOptions = {
+  name: NetworkNames.Fantom,
+  name_long: 'Fantom',
+  homePage: 'https://fantom.foundation/',
+  blockExplorerTX: 'https://explorer.fantom.network/transactions/[[txHash]]',
+  blockExplorerAddr: 'https://explorer.fantom.network/address/[[address]]',
+  chainID: '0xfa',
+  isTestNetwork: false,
+  currencyName: 'FTM',
+  currencyNameLong: 'Fantom',
+  node: 'https://rpc.fantom.network',
+  icon,
+  coingeckoID: 'fantom',
+  coingeckoPlatform: CoingeckoPlatform.Fantom,
+  assetsInfoHandler,
+  activityHandler: wrapActivityHandler(() => Promise.resolve([])),
+};
+
+const ftm = new EvmNetwork(ftmOptions);
+
+export default ftm;

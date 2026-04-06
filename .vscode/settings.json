@@ -1,0 +1,14 @@
+{
+  "eslint.workingDirectories": [
+    {
+      "directory": "./packages/extension",
+      "changeProcessCWD": true
+    }
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.inlineSuggest.enabled": false
+}

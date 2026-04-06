@@ -1,0 +1,66 @@
+{
+  "name": "@enkryptcom/extension-bridge",
+  "version": "0.0.2",
+  "description": "Messaging in Web Extensions made easy. Out of the box.",
+  "type": "module",
+  "keywords": [
+    "chrome",
+    "extension",
+    "messaging",
+    "communication",
+    "protocol",
+    "content",
+    "background",
+    "devtools",
+    "script",
+    "crx",
+    "bridge"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enkryptcom/enKrypt/tree/main/packages/extension-bridge"
+  },
+  "author": "Neek Sandhu <neek.sandhu@outlook.com>",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.cjs",
+    "module": "dist/index.js",
+    "types": "dist/index.d.ts"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/window/index.ts src/types.ts --clean --format esm,cjs --dts",
+    "test": "echo 'no-tests'",
+    "lint": "prettier --write ."
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "nanoevents": "^9.1.0",
+    "serialize-error": "13.0.1",
+    "tiny-uid": "^1.1.2",
+    "webextension-polyfill": "^0.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.11",
+    "@types/webextension-polyfill": "^0.12.4",
+    "@typescript-eslint/eslint-plugin": "^8.56.0",
+    "@typescript-eslint/parser": "^8.56.0",
+    "bumpp": "^10.4.1",
+    "eslint": "^9.39.2",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-module-resolver": "^1.5.0",
+    "prettier": "^3.8.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "tsup": "^8.5.1",
+    "type-fest": "^5.4.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "8.56.0"
+  }
+}
