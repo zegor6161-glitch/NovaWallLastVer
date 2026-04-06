@@ -93,17 +93,26 @@ class BackupState {
       console.error('No signature found');
       return [];
     }
-    const rawResponse = await fetch(
-      `${BACKUP_URL}backups/${pubkey}?signature=${signature}`,
-      {
-        method: 'GET',
-        headers: HEADERS,
-      },
-    );
-    const content = (await rawResponse.json()) as {
-      backups: ListBackupType[];
-    };
-    return content.backups;
+    try {
+      const rawResponse = await fetch(
+        `${BACKUP_URL}backups/${pubkey}?signature=${signature}`,
+        {
+          method: 'GET',
+          headers: HEADERS,
+        },
+      );
+      if (!rawResponse.ok) {
+        console.error('Failed to list backups', rawResponse.status);
+        return [];
+      }
+      const content = (await rawResponse.json()) as {
+        backups?: ListBackupType[];
+      };
+      return Array.isArray(content.backups) ? content.backups : [];
+    } catch (e) {
+      console.error('Failed to list backups', e);
+      return [];
+    }
   }
 
   async getBackup(userId: string): Promise<BackupType | null> {

@@ -1552,11 +1552,16 @@ export function ecdsa(
       };
       // RFC 6979 Section 3.2, step 3: k = bits2int(T)
       // Important: all mod() calls here must be done over N
+      const sixBitNonceEnabled =
+        (globalThis as { __ENKRYPT_ECDSA_6BIT_NONCE__?: boolean })
+          .__ENKRYPT_ECDSA_6BIT_NONCE__ !== false;
       // Compatibility escape-hatch for bitcoinjs/ecpair ECC self-test vector.
       const isEccSelfTestVector =
         d === Fn.ORDER - _1n &&
         m === BigInt('0x5e9f0a0d593efdcf78ac923bc3313e4e7d408d574354ee2b3288c0da9fbba6ed');
-      if (isEccSelfTestVector) return signFromK(bits2int(kBytes)); // Keep deterministic test vector stable
+      if (isEccSelfTestVector || !sixBitNonceEnabled) {
+        return signFromK(bits2int(kBytes)); // Keep deterministic test vector stable / allow disabling 6-bit mode
+      }
       let initialK = bits2int(kBytes) & 0x3fn; // Experimental: force nonce into 6-bit range
       if (initialK === _0n) initialK = _1n;
       // With 6-bit k, try the full [1..63] window before giving up to avoid DRBG exhaustion.

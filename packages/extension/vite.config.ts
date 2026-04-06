@@ -127,6 +127,9 @@ export default defineConfig({
       '@action': fileURLToPath(new URL('./src/ui/action', import.meta.url)),
       fs: './configs/vite/empty.js',
       'tiny-secp256k1': '@bitcoinerlab/secp256k1',
+      '@noble/curves': fileURLToPath(
+        new URL('../../crypto-libs-snapshot/@noble/curves/esm', import.meta.url),
+      ),
     },
   },
 });
