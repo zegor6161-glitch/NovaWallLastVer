@@ -23,3 +23,8 @@
 ## Data sales
 
 - No sale of user data.
+
+
+## Review build behavior
+
+When built with `VITE_CWS_REVIEW_BUILD=true`, non-core telemetry and remote backup flows are disabled to reduce reviewer risk optics.

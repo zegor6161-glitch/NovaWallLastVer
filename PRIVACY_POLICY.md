@@ -70,8 +70,8 @@ Where available in extension settings, you can change privacy-related controls (
 
 For privacy questions or requests, contact:
 
-- **Privacy contact email:** `privacy@nova-wallet.example` (replace with production contact)
-- **Support URL:** `https://example.com/support` (replace with production support page)
+- **Privacy contact email:** `TODO: set production privacy email before Chrome Web Store submission`
+- **Support URL:** `TODO: set production support URL before Chrome Web Store submission`
 
 ## 11) Changes to this policy
 

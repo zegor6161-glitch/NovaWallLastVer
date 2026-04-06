@@ -25,6 +25,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { BACKUP_URL, HEADERS } from './configs';
 import { EnkryptAccount, SignerType, WalletType } from '@enkryptcom/types';
 import KeyRingBase from '../keyring/keyring';
+import { isBackupFeatureAllowed } from '@/configs/review-build';
 
 class BackupState {
   private storage: BrowserStorage;
@@ -78,6 +79,8 @@ class BackupState {
     signature: string;
     pubkey: string;
   }): Promise<ListBackupType[]> {
+    // CWS review build disables remote backup/sync network traffic for minimal review scope.
+    if (!isBackupFeatureAllowed()) return [];
     let signature: string = '';
     let pubkey: string = '';
     if (options) {
@@ -116,6 +119,7 @@ class BackupState {
   }
 
   async getBackup(userId: string): Promise<BackupType | null> {
+    if (!isBackupFeatureAllowed()) return null;
     const mainWallet = await this.getMainWallet();
     const now = new Date();
     const messageToSign = `${userId}-GET-BACKUP-${(now.getUTCMonth() + 1).toString().padStart(2, '0')}-${now.getUTCDate().toString().padStart(2, '0')}-${now.getUTCFullYear()}`;
@@ -135,6 +139,7 @@ class BackupState {
   }
 
   async deleteBackup(userId: string): Promise<boolean> {
+    if (!isBackupFeatureAllowed()) return false;
     const mainWallet = await this.getMainWallet();
     const now = new Date();
     const messageToSign = `${userId}-DELETE-BACKUP-${(now.getUTCMonth() + 1).toString().padStart(2, '0')}-${now.getUTCDate().toString().padStart(2, '0')}-${now.getUTCFullYear()}`;
@@ -164,6 +169,7 @@ class BackupState {
   }
 
   async restoreBackup(userId: string, keyringPassword: string): Promise<void> {
+    if (!isBackupFeatureAllowed()) return;
     const mainWallet = await this.getMainWallet();
     const exludedSignerTypes: SignerType[] = [];
     await sendUsingInternalMessengers({
@@ -256,6 +262,7 @@ class BackupState {
   }
 
   async backup(firstTime: boolean): Promise<boolean> {
+    if (!isBackupFeatureAllowed()) return true;
     const state = await this.getState();
     if (firstTime && state.lastBackupTime !== 0) {
       return true;
@@ -266,6 +273,8 @@ class BackupState {
     const pkr = new PublicKeyRing();
     const allAccounts = await pkr.getAccounts();
     const mainWallet = await this.getMainWallet();
+    // SECURITY: backup payload must never contain seed phrase, private keys,
+    // or plaintext passwords. Only account derivation metadata is included.
     const backupData: BackupData = {
       accounts: allAccounts
         .filter(
@@ -333,6 +342,13 @@ class BackupState {
   }
 
   async getState(): Promise<IState> {
+    if (!isBackupFeatureAllowed()) {
+      return {
+        lastBackupTime: 0,
+        userId: 'cws-review-build',
+        enabled: false,
+      };
+    }
     const state = await this.storage.get(StorageKeys.backupInfo);
     if (!state) {
       const newState: IState = {
@@ -357,14 +373,17 @@ class BackupState {
   }
 
   async disableBackups(): Promise<void> {
+    if (!isBackupFeatureAllowed()) return;
     const state: IState = await this.getState();
     await this.setState({ ...state, enabled: false });
   }
   async enableBackups(): Promise<void> {
+    if (!isBackupFeatureAllowed()) return;
     const state: IState = await this.getState();
     await this.setState({ ...state, enabled: true });
   }
   async isBackupEnabled(): Promise<boolean> {
+    if (!isBackupFeatureAllowed()) return false;
     const state: IState = await this.getState();
     return state.enabled;
   }

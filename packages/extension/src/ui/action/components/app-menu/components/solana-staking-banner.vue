@@ -1,5 +1,5 @@
 <template>
-  <div class="solana-staking-banner">
+  <div v-if="showPromo" class="solana-staking-banner">
     <img src="@action/assets/banners/solana-staking-banner.png" alt="" />
 
     <div class="solana-staking-banner__content">
@@ -22,15 +22,18 @@ import EnkryptStakingLogo from '@action/icons/common/enkrypt-staking-logo.vue';
 import { trackSolanaStakingBanner } from '@/libs/metrics';
 import { openLink } from '@action/utils/browser';
 import { SolanaStakingBannerEvents } from '@/libs/metrics/types';
+import { isPromoSurfaceAllowed } from '@/configs/review-build';
 
 const emit = defineEmits<{
   (e: 'close'): void;
 }>();
+const showPromo = isPromoSurfaceAllowed();
 
 const close = () => {
   emit('close');
 };
 const openStakingLink = async () => {
+  if (!showPromo) return;
   trackSolanaStakingBanner(SolanaStakingBannerEvents.NetworkListClicked);
   setTimeout(() => {
     openLink('https://staking.enkrypt.com');

@@ -1,5 +1,5 @@
 <template>
-  <div class="survey-popup">
+  <div v-if="showPromo" class="survey-popup">
     <div class="survey-popup__content">
       <h5>Help us improve Nova Wallet</h5>
       <p>Please take a quick survey. We appreciate you!</p>
@@ -17,15 +17,18 @@
 <script setup lang="ts">
 import CloseIcon from '@action/icons/common/close-icon.vue';
 import { openLink } from '@action/utils/browser';
+import { isPromoSurfaceAllowed } from '@/configs/review-build';
 
 const emit = defineEmits<{
   (e: 'close'): void;
 }>();
+const showPromo = isPromoSurfaceAllowed();
 
 const close = () => {
   emit('close');
 };
 const openSurveyLink = async () => {
+  if (!showPromo) return;
   openLink('https://tally.so/r/nGMpdL');
   close();
 };

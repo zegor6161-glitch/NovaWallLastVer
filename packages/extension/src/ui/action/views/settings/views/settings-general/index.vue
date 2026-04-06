@@ -7,7 +7,7 @@
       :value="currentSelectedCurrency"
       :list="currencyList"
     ></settings-select>
-    <div class="settings__label">
+    <div v-if="!isCwsReviewBuild" class="settings__label">
       <p>Select your preferred currency</p>
     </div>
 
@@ -16,7 +16,7 @@
       :is-checked="isEthereumDisabled"
       @update:check="toggleEthereumDisable"
     />
-    <div class="settings__label">
+    <div v-if="!isCwsReviewBuild" class="settings__label">
       <p>
         Pause Nova Wallet interactions with Ethereum DApps if you are using other
         web3 extensions
@@ -42,6 +42,7 @@
     </div>
 
     <settings-switch
+      v-if="!isCwsReviewBuild"
       title="Usage analytics"
       :is-checked="isMetricsEnabled"
       @update:check="toggleMetricsEnabled"
@@ -51,7 +52,11 @@
         Anonymous product analytics helps us improve Nova Wallet. This never includes seed phrase, private keys, passwords, raw signatures, or full transaction data.
       </p>
     </div>
-    <settings-button title="Settings backup" @click="$emit('open:backups')" />
+    <settings-button
+      v-if="!isCwsReviewBuild"
+      title="Settings backup"
+      @click="$emit('open:backups')"
+    />
     <div class="settings__label">
       <p>
         Save your current list of accounts across all networks, so you don't
@@ -83,6 +88,7 @@ import { SettingsType } from '@/libs/settings-state/types';
 import { optOutofMetrics } from '@/libs/metrics';
 import { useCurrencyStore } from '../../store';
 import { storeToRefs } from 'pinia';
+import { IS_CWS_REVIEW_BUILD } from '@/configs/review-build';
 
 const settingsState = new SettingsState();
 const isEthereumDisabled = ref(false);
@@ -91,6 +97,7 @@ const isUnisatEnabled = ref(true);
 const isMetricsEnabled = ref(false);
 
 const store = useCurrencyStore();
+const isCwsReviewBuild = IS_CWS_REVIEW_BUILD;
 const { setSelectedCurrency } = store;
 const { currentSelectedCurrency, currencyList } = storeToRefs(store);
 defineEmits<{ (e: 'open:backups'): void }>();

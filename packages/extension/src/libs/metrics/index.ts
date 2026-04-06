@@ -16,6 +16,7 @@ import {
   SolanaStakingBannerEvents,
 } from './types';
 import { track as trackAnalytics, setAnalyticsEnabled } from '@/libs/analytics';
+import { isTelemetryAllowed } from '@/configs/review-build';
 
 const metrics = new Metrics();
 
@@ -191,6 +192,7 @@ const trackUpdatesEvents = (
   metrics.track('updatesClick', { event, ...options });
 };
 const optOutofMetrics = (optOut: boolean) => {
+  if (!isTelemetryAllowed()) return;
   if (!__IS_FIREFOX__) {
     metrics.setOptOut(false);
     metrics.track('settings', {

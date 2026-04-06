@@ -17,7 +17,7 @@
           />
 
           <network-activity-action v-bind="$attrs" />
-          <reward-program-banner />
+          <reward-program-banner v-if="showPromoSurface" />
           <network-assets-header v-if="!isLoading && assets.length > 0" />
           <network-assets-error
             v-if="isFetchError"
@@ -89,8 +89,10 @@ import CustomEvmToken from './components/custom-evm-token.vue';
 import CustomMassaToken from './components/custom-massa-token.vue';
 import { EvmNetwork } from '@/providers/ethereum/types/evm-network';
 import { ProviderName } from '@/types/provider';
+import { isPromoSurfaceAllowed } from '@/configs/review-build';
 
 const showDeposit = ref(false);
+const showPromoSurface = isPromoSurfaceAllowed();
 
 const route = useRoute();
 const props = defineProps({

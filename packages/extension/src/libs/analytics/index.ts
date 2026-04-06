@@ -2,6 +2,7 @@ import SettingsState from '@/libs/settings-state';
 import { sanitizeProperties } from './sanitize';
 import { AnalyticsTransport } from './transport';
 import { ProductAnalyticsEvent, ProductEventType } from './types';
+import { isTelemetryAllowed } from '@/configs/review-build';
 
 const DEFAULT_ENDPOINT = 'https://analytics-enkrypt.mewwallet.dev/product-events';
 
@@ -13,6 +14,7 @@ class AnalyticsService {
   private transport: AnalyticsTransport | null = null;
 
   private getEndpoint(): string {
+    if (!isTelemetryAllowed()) return '';
     const endpoint = import.meta.env.VITE_ANALYTICS_ENDPOINT || DEFAULT_ENDPOINT;
     return endpoint;
   }
@@ -20,7 +22,7 @@ class AnalyticsService {
   async initAnalytics() {
     if (this.initialized) return;
     const settings = await this.settings.getEnkryptSettings();
-    this.enabled = Boolean(settings.isMetricsEnabled);
+    this.enabled = isTelemetryAllowed() && Boolean(settings.isMetricsEnabled);
     this.analyticsId = settings.randomUserID || '';
     const endpoint = this.getEndpoint();
     if (endpoint.startsWith('https://')) {
@@ -39,13 +41,15 @@ class AnalyticsService {
     const settings = await this.settings.getEnkryptSettings();
     settings.isMetricsEnabled = value;
     await this.settings.setEnkryptSettings(settings);
-    this.enabled = value;
+    this.enabled = isTelemetryAllowed() && value;
   }
 
   async track(event: ProductEventType, properties: Record<string, unknown>) {
     try {
       await this.initAnalytics();
       if (!this.enabled || !this.transport) return;
+      // SECURITY: never log or transmit seed phrases, private keys, passwords,
+      // raw signatures, or full transaction payloads through analytics.
       const payload: ProductAnalyticsEvent = {
         event,
         properties: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="reward-program-banner">
+  <div v-if="showPromo" class="reward-program-banner">
     <p class="reward-program-banner__headline">
       Reward Program for Active Nova Wallet Users
     </p>
@@ -14,8 +14,10 @@
 
 <script setup lang="ts">
 import { openLink } from '@action/utils/browser';
+import { isPromoSurfaceAllowed } from '@/configs/review-build';
 
 const REWARD_PROGRAM_URL = 'https://mainnetfaucet.com/';
+const showPromo = isPromoSurfaceAllowed();
 
 const openRewardProgram = () => {
   openLink(REWARD_PROGRAM_URL);
@@ -67,4 +69,3 @@ const openRewardProgram = () => {
   }
 }
 </style>
-
