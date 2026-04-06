@@ -286,6 +286,11 @@ const approve = async () => {
     const { Request, Resolve } = await windowPromise;
     const version = Request.value.params![2] as SignTypedDataVersion;
     const typedData = Request.value.params![0];
+    track('signature_request_approved', {
+      chain_id: String(network.value.chainID),
+      signature_type: String(version),
+      site_category: 'unknown',
+    });
     TypedMessageSigner({
       account: account.value,
       network: network.value,
@@ -301,6 +306,11 @@ const approve = async () => {
 
 const deny = async () => {
   const { Resolve } = await windowPromise;
+  track('signature_request_rejected', {
+    chain_id: String(network.value.chainID),
+    signature_type: String(SignTypedDataVersion.V4),
+    site_category: 'unknown',
+  });
   Resolve.value({ error: getError(ErrorCodes.userRejected) });
 };
 </script>

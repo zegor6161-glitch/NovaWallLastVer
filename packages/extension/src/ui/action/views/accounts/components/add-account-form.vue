@@ -60,6 +60,7 @@ import { EnkryptAccount, KeyRecordAdd, WalletType } from '@enkryptcom/types';
 import Keyring from '@/libs/keyring/public-keyring';
 import BackupState from '@/libs/backup-state';
 import AppDialog from '@action/components/app-dialog/index.vue';
+import { track } from '@/libs/analytics';
 
 const model = defineModel<boolean>();
 
@@ -138,6 +139,10 @@ const addAccount = async () => {
       params: [keyReq],
     }),
   }).then(() => {
+    track('account_added', {
+      wallet_type: 'srp',
+      screen: 'accounts_page',
+    });
     const backupState = new BackupState();
     backupState.backup(false).catch(() => {
       console.error('Failed to backup');

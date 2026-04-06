@@ -15,6 +15,7 @@ import {
   UpdatesOpenLocation,
   SolanaStakingBannerEvents,
 } from './types';
+import { track as trackAnalytics, setAnalyticsEnabled } from '@/libs/analytics';
 
 const metrics = new Metrics();
 
@@ -25,6 +26,12 @@ const redactText = (value?: string) => {
 
 const trackGenericEvents = (event: GenericEvents) => {
   metrics.track('generic', { event });
+  if (event === GenericEvents.login_success) {
+    trackAnalytics('wallet_unlocked', {
+      unlock_method: 'password',
+      wallet_type: 'srp',
+    });
+  }
 };
 
 const trackNetwork = (
@@ -63,6 +70,18 @@ const trackNetwork = (
     customNetworkCurrencyLongLength: redactText(options.customNetworkCurrencyLong),
     customChainIdLength: redactText(options.customChainId),
   });
+
+  if (
+    event === NetworkChangeEvents.NetworkChangeAPI ||
+    event === NetworkChangeEvents.NetworkChangePopup ||
+    event === NetworkChangeEvents.NetworkActiveChanged
+  ) {
+    trackAnalytics('network_switched', {
+      chain_id: options.customChainId || String(options.network || ''),
+      network_family: options.provider || 'evm',
+      screen: 'network_selector',
+    });
+  }
 };
 
 const trackSwapEvents = (
@@ -84,6 +103,26 @@ const trackSwapEvents = (
     hasError: Boolean(options.error),
     errorLength: redactText(options.error),
   });
+
+  if (event === SwapEventType.SwapOpen) {
+    trackAnalytics('swap_started', {
+      chain_id: String(options.network),
+      feature: 'swap',
+      token_in_symbol: options.fromToken,
+      token_out_symbol: options.toToken,
+      wallet_type: 'srp',
+      screen: 'swap_page',
+    });
+  }
+  if (event === SwapEventType.SwapComplete) {
+    trackAnalytics('swap_submitted', {
+      chain_id: String(options.network),
+      feature: 'swap',
+      token_in_symbol: options.fromToken,
+      token_out_symbol: options.toToken,
+      route_type: options.swapProvider || 'aggregated',
+    });
+  }
 };
 
 const trackBuyEvents = (
@@ -108,6 +147,19 @@ const trackSendEvents = (
     hasError: Boolean(options.error),
     errorLength: redactText(options.error),
   });
+
+  if (event === SendEventType.SendOpen || event === SendEventType.SendAPIVerify) {
+    trackAnalytics('send_started', {
+      chain_id: String(options.network),
+      screen: 'send_page',
+    });
+  }
+  if (event === SendEventType.SendComplete || event === SendEventType.SendAPIComplete) {
+    trackAnalytics('send_submitted', {
+      chain_id: String(options.network),
+      source: 'manual_send',
+    });
+  }
 };
 
 const trackNFTEvents = (
@@ -147,6 +199,7 @@ const optOutofMetrics = (optOut: boolean) => {
     });
   }
   metrics.setOptOut(optOut);
+  setAnalyticsEnabled(!optOut);
 };
 
 const trackSolanaStakingBanner = (event: SolanaStakingBannerEvents) => {

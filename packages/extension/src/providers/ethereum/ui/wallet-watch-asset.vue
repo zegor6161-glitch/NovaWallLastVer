@@ -133,6 +133,7 @@ import Tooltip from '@action/components/tooltip/index.vue';
 import { fromBase } from '@enkryptcom/utils';
 import { formatFloatingPointValue } from '@/libs/utils/number-formatter';
 import { TokensState } from '@/libs/tokens-state';
+import { track } from '@/libs/analytics';
 
 const windowPromise = WindowPromiseHandler(4);
 const network = ref<EvmNetwork>(DEFAULT_EVM_NETWORK);
@@ -195,6 +196,11 @@ const addToken = async () => {
   );
 
   if (added) {
+    track('token_imported', {
+      chain_id: String(network.value.chainID),
+      asset_symbol: tokenInfo.value.symbol,
+      screen: 'token_import',
+    });
     Resolve.value({ result: JSON.stringify(true) });
   }
 

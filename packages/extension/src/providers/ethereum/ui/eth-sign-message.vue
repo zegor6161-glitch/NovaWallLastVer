@@ -155,6 +155,11 @@ const approve = async () => {
   const { Request, Resolve } = await windowPromise;
   const msg = Request.value.params![0] as `0x{string}`;
   isProcessing.value = true;
+  track('signature_request_approved', {
+    chain_id: String(network.value.chainID),
+    signature_type: 'personal_sign',
+    site_category: 'unknown',
+  });
   MessageSigner({
     account: account.value,
     network: network.value,
@@ -166,6 +171,11 @@ const approve = async () => {
 
 const deny = async () => {
   const { Resolve } = await windowPromise;
+  track('signature_request_rejected', {
+    chain_id: String(network.value.chainID),
+    signature_type: 'personal_sign',
+    site_category: 'unknown',
+  });
   Resolve.value({
     error: getError(ErrorCodes.userRejected),
   });

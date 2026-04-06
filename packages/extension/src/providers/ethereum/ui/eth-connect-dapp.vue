@@ -109,6 +109,7 @@ import { getError } from '@/libs/error';
 import { ErrorCodes } from '../types';
 import AccountState from '../libs/accounts-state';
 import { isWalletRestricted } from '@/libs/utils/screening';
+import { track } from '@/libs/analytics';
 
 const windowPromise = WindowPromiseHandler(1);
 const network = ref<EvmNetwork>(DEFAULT_EVM_NETWORK);
@@ -183,6 +184,11 @@ const connect = async () => {
     accountHeaderData.value.selectedAccount!.address,
     Options.value.domain,
   );
+  track('dapp_connection_approved', {
+    chain_id: String(network.value.chainID),
+    site_category: 'unknown',
+    connection_type: 'extension_injected',
+  });
   Resolve.value({
     result: JSON.stringify([accountHeaderData.value.selectedAccount!.address]),
   });
