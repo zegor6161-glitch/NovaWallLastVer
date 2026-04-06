@@ -5,6 +5,8 @@ function transFormManifest(): CrxPlugin {
     name: 'crx:enkrypt:transform-manifest',
     enforce: 'post',
     renderCrxManifest(manifest) {
+      // NOTE: Wallet provider discovery for arbitrary dApps requires broad URL matches.
+      // We keep injection limited to a static bundled script and do not load remote executable code.
       manifest.content_scripts = [
         {
           matches: ['http://*/*', 'https://*/*'],
@@ -19,6 +21,8 @@ function transFormManifest(): CrxPlugin {
         },
       ] as any;
       if (process.env.BROWSER !== 'opera') {
+        // MAIN world is required for EIP-1193/EIP-6963 compatibility: provider objects
+        // must exist on the page's window context to interoperate with dApps.
         manifest.content_scripts?.push({
           matches: ['http://*/*', 'https://*/*'],
           js: ['scripts/inject.js'],

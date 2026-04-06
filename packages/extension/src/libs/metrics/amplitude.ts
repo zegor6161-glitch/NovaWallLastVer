@@ -1,6 +1,7 @@
 import { init, track, Types, setOptOut } from '@amplitude/analytics-browser';
 import { detectBrowser, detectOS } from '@action/utils/browser';
 import SettingsState from '../settings-state';
+import { isTelemetryAllowed } from '@/configs/review-build';
 
 const getUserAge = (installedDate: number) => {
   const date1 = new Date(installedDate);
@@ -25,6 +26,7 @@ class Metrics {
     });
   }
   private init() {
+    if (!isTelemetryAllowed()) return;
     const settingsState = new SettingsState();
     settingsState.getEnkryptSettings().then(set => {
       this.installedTime = set.installedTimestamp;
@@ -55,6 +57,7 @@ class Metrics {
     });
   }
   track(event: string, options: Record<string, unknown>) {
+    if (!isTelemetryAllowed()) return;
     track(
       event,
       { ...options, userAge: getUserAge(this.installedTime) },
@@ -66,6 +69,7 @@ class Metrics {
     );
   }
   setOptOut(val: boolean) {
+    if (!isTelemetryAllowed()) return;
     setOptOut(val);
   }
 }

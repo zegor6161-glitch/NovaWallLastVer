@@ -1,5 +1,5 @@
 <template>
-  <div class="network-assets-solana-staking-banner">
+  <div v-if="showPromo" class="network-assets-solana-staking-banner">
     <a
       href="javascript:void(0);"
       @click="openStakingLink"
@@ -48,16 +48,19 @@ import AttractiveAprIcon from '@action/icons/banners/attractive-apr-icon.vue';
 import { trackSolanaStakingBanner } from '@/libs/metrics';
 import { openLink } from '@action/utils/browser';
 import { SolanaStakingBannerEvents } from '@/libs/metrics/types';
+import { isPromoSurfaceAllowed } from '@/configs/review-build';
 
 const emit = defineEmits<{
   (e: 'close'): void;
 }>();
+const showPromo = isPromoSurfaceAllowed();
 
 const close = () => {
   emit('close');
 };
 
 const openStakingLink = async () => {
+  if (!showPromo) return;
   trackSolanaStakingBanner(SolanaStakingBannerEvents.SolanaWalletClicked);
   openLink('https://staking.enkrypt.com');
 };

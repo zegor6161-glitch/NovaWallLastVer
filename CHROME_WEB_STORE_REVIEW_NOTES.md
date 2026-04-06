@@ -63,3 +63,13 @@ This extension is submitted as a wallet product, not surveillance software:
 - permissions are tied to wallet functionality;
 - sensitive credentials are processed locally;
 - no hidden seed/private key collection behavior is intended.
+
+## 10) CWS review build profile
+
+For Chrome Web Store review, we prepare a dedicated build profile with `VITE_CWS_REVIEW_BUILD=true` that:
+
+- disables promo/reward/survey surfaces;
+- disables telemetry senders;
+- disables remote backup/sync flows.
+
+This keeps reviewer scope centered on core wallet functionality (self-custody, signing, dApp connectivity).
