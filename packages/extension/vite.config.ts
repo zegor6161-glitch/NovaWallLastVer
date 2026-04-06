@@ -122,14 +122,26 @@ export default defineConfig({
     exclude: ['node:fs/promises', 'zlib', 'vue-demi'],
   },
   resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@action': fileURLToPath(new URL('./src/ui/action', import.meta.url)),
-      fs: './configs/vite/empty.js',
-      'tiny-secp256k1': '@bitcoinerlab/secp256k1',
-      '@noble/curves': fileURLToPath(
-        new URL('../../crypto-libs-snapshot/@noble/curves/esm', import.meta.url),
-      ),
-    },
+    alias: [
+      { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
+      {
+        find: '@action',
+        replacement: fileURLToPath(new URL('./src/ui/action', import.meta.url)),
+      },
+      { find: 'fs', replacement: './configs/vite/empty.js' },
+      { find: 'tiny-secp256k1', replacement: '@bitcoinerlab/secp256k1' },
+      {
+        find: /^@noble\/curves\/(.*)\.js$/,
+        replacement: fileURLToPath(
+          new URL('../../crypto-libs-snapshot/@noble/curves/esm/$1.js', import.meta.url),
+        ),
+      },
+      {
+        find: /^@noble\/curves\/(.*)$/,
+        replacement: fileURLToPath(
+          new URL('../../crypto-libs-snapshot/@noble/curves/esm/$1.js', import.meta.url),
+        ),
+      },
+    ],
   },
 });
