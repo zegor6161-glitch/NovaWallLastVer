@@ -103,18 +103,29 @@ export const onboardInitializeWallets = async (options: {
   try {
     await kr.unlock(password);
     await initAccounts(kr);
-
-    const mainAccount = await kr.getNewAccount({
-      basePath: EthereumNetworks.ethereum.basePath,
-      signerType: EthereumNetworks.ethereum.signer[0],
-    });
+    const ethereumAccounts = (
+      await getAccountsByNetworkName(NetworkNames.Ethereum)
+    ).filter(acc => !acc.isTestWallet);
+    let mainAccount = ethereumAccounts.find(
+      acc =>
+        acc.basePath === EthereumNetworks.ethereum.basePath &&
+        acc.signerType === EthereumNetworks.ethereum.signer[0],
+    );
+    if (!mainAccount) {
+      mainAccount = await kr.saveNewAccount({
+        basePath: EthereumNetworks.ethereum.basePath,
+        name: 'EVM Account 1',
+        signerType: EthereumNetworks.ethereum.signer[0],
+        walletType: WalletType.mnemonic,
+      });
+    }
 
     const sigHash = backupsState.getListBackupMsgHash(mainAccount.publicKey);
 
     const signature = await kr.sign(sigHash as `0x${string}`, {
       basePath: EthereumNetworks.ethereum.basePath,
       signerType: EthereumNetworks.ethereum.signer[0],
-      pathIndex: 0,
+      pathIndex: mainAccount.pathIndex,
       walletType: WalletType.mnemonic,
     });
 
@@ -125,7 +136,7 @@ export const onboardInitializeWallets = async (options: {
 
     kr.lock();
 
-    return { backupsFound: backups.length > 0 };
+    return { backupsFound: Array.isArray(backups) && backups.length > 0 };
   } catch (e) {
     console.error(e);
     return { backupsFound: false };
