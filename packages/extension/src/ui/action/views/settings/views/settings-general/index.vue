@@ -42,14 +42,13 @@
     </div>
 
     <settings-switch
-      title="Disable Amplitude Events"
-      :is-checked="!isMetricsEnabled"
+      title="Usage analytics"
+      :is-checked="isMetricsEnabled"
       @update:check="toggleMetricsEnabled"
     />
     <div class="settings__label">
       <p>
-        Nova Wallet uses Amplitude events to improve the product. No identifiable
-        information is collected.
+        Anonymous product analytics helps us improve Nova Wallet. This never includes seed phrase, private keys, passwords, raw signatures, or full transaction data.
       </p>
     </div>
     <settings-button title="Settings backup" @click="$emit('open:backups')" />
@@ -89,7 +88,7 @@ const settingsState = new SettingsState();
 const isEthereumDisabled = ref(false);
 const isPolkadotjsDisabled = ref(false);
 const isUnisatEnabled = ref(true);
-const isMetricsEnabled = ref(true);
+const isMetricsEnabled = ref(false);
 
 const store = useCurrencyStore();
 const { setSelectedCurrency } = store;
@@ -126,10 +125,10 @@ const toggleUnisatEnable = async (isChecked: boolean) => {
 };
 const toggleMetricsEnabled = async (isChecked: boolean) => {
   const enkryptSettings = await settingsState.getEnkryptSettings();
-  enkryptSettings.isMetricsEnabled = !isChecked;
+  enkryptSettings.isMetricsEnabled = isChecked;
   await settingsState.setEnkryptSettings(enkryptSettings);
-  optOutofMetrics(isChecked);
-  isMetricsEnabled.value = !isChecked;
+  optOutofMetrics(!isChecked);
+  isMetricsEnabled.value = isChecked;
 };
 </script>
 

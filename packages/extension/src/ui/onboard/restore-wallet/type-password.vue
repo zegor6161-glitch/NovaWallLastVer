@@ -34,6 +34,7 @@ import { useRouter } from 'vue-router';
 import { routes } from '../restore-wallet/routes';
 import { onboardInitializeWallets } from '@/libs/utils/initialize-wallet';
 import { useRestoreStore } from './store';
+import { track } from '@/libs/analytics';
 const store = useRestoreStore();
 const router = useRouter();
 
@@ -48,6 +49,11 @@ const nextAction = () => {
       extraWord: unref(store.extraWord),
     })
       .then(res => {
+        track('wallet_imported', {
+          import_type: 'srp',
+          account_count_bucket: '1',
+          screen: 'import_complete',
+        });
         isInitializing.value = false;
         if (res.backupsFound) {
           router.push({

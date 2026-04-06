@@ -23,6 +23,7 @@ import { useRouter } from 'vue-router';
 import { ref, computed } from 'vue';
 import { chunk, shuffle, sample } from 'lodash';
 import { onboardInitializeWallets } from '@/libs/utils/initialize-wallet';
+import { track } from '@/libs/analytics';
 
 const router = useRouter();
 const store = useOnboardStore();
@@ -61,6 +62,11 @@ const nextAction = () => {
     mnemonic: phrase,
     password,
   }).then(() => {
+    track('wallet_created', {
+      wallet_type: 'srp',
+      account_count_bucket: '1',
+      screen: 'onboarding_complete',
+    });
     isInitializing.value = false;
     router.push({ name: routes.walletReady.name });
   });
