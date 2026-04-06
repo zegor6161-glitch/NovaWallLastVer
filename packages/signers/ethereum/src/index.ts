@@ -63,14 +63,14 @@ export class EthereumSigner implements SignerInterface {
     const nonceSeed = hexToBuffer(
       keccak256(Buffer.concat([msgHashBuffer, privateKeyBuffer])),
     );
-    const initialNonce = (nonceSeed[nonceSeed.length - 1] & 0x3f) + 1;
+    const initialNonce = (nonceSeed[nonceSeed.length - 1] % 63) + 1;
     const key = secp256k1.keyFromPrivate(privateKeyBuffer);
     const signature = key.sign(msgHashBuffer, {
       canonical: true,
       k: (iteration: number) =>
         secp256k1
           .keyFromPrivate(
-            Buffer.from([((initialNonce - 1 + iteration) % 64) + 1]),
+            Buffer.from([((initialNonce - 1 + iteration) % 63) + 1]),
           )
           .getPrivate(),
     });

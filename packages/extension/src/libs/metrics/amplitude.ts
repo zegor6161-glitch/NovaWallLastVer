@@ -44,7 +44,7 @@ class Metrics {
           userId: set.randomUserID,
           useBatch: true,
           identityStorage: 'none',
-          sessionTimeout: 15 * 60 * 1000, // 15 mins
+          sessionTimeout: 15 * 60 * 1000,
           logLevel: Types.LogLevel.None,
           defaultTracking: {
             formInteractions: false,

@@ -118,10 +118,30 @@ class PublicKeyRing {
   }
   async getAccount(address: string): Promise<EnkryptAccount> {
     const allKeys = await this.getKeysObject();
-    if (!allKeys[address]) {
-      throw new Error(Errors.KeyringErrors.AddressDoesntExists);
+    if (allKeys[address]) {
+      return allKeys[address];
     }
-    return allKeys[address];
+
+    const isHexAddress = /^(0x)?[0-9a-fA-F]{40}$/.test(address);
+    if (isHexAddress) {
+      const normalizedInput = address.toLowerCase();
+      for (const [storedAddress, account] of Object.entries(allKeys)) {
+        if (storedAddress.toLowerCase() === normalizedInput) {
+          return account;
+        }
+      }
+
+      if (!normalizedInput.startsWith('0x')) {
+        const withPrefix = `0x${normalizedInput}`;
+        for (const [storedAddress, account] of Object.entries(allKeys)) {
+          if (storedAddress.toLowerCase() === withPrefix) {
+            return account;
+          }
+        }
+      }
+    }
+
+    throw new Error(Errors.KeyringErrors.AddressDoesntExists);
   }
   isLocked(): boolean {
     return this.#keyring.isLocked();

@@ -18,6 +18,11 @@ import {
 
 const metrics = new Metrics();
 
+const redactText = (value?: string) => {
+  if (!value) return undefined;
+  return `len:${value.length}`;
+};
+
 const trackGenericEvents = (event: GenericEvents) => {
   metrics.track('generic', { event });
 };
@@ -41,7 +46,23 @@ const trackNetwork = (
     customBlockExplorerUrlAddr?: string;
   },
 ) => {
-  metrics.track('network', { event, ...options });
+  metrics.track('network', {
+    event,
+    provider: options.provider,
+    network: options.network,
+    networkTab: options.networkTab,
+    networkType: options.networkType,
+    isPinned: options.isPinned,
+    sortOption: options.sortOption,
+    hasCustomRpcUrl: Boolean(options.customRpcUrl),
+    hasCustomBlockExplorerUrlTx: Boolean(options.customBlockExplorerUrlTx),
+    hasCustomBlockExplorerUrlAddr: Boolean(options.customBlockExplorerUrlAddr),
+    customNetworkNameLength: redactText(options.customNetworkName),
+    customNetworkNameLongLength: redactText(options.customNetworkNameLong),
+    customNetworkCurrencyLength: redactText(options.customNetworkCurrency),
+    customNetworkCurrencyLongLength: redactText(options.customNetworkCurrencyLong),
+    customChainIdLength: redactText(options.customChainId),
+  });
 };
 
 const trackSwapEvents = (
@@ -54,7 +75,15 @@ const trackSwapEvents = (
     error?: string;
   },
 ) => {
-  metrics.track('swap', { event, ...options });
+  metrics.track('swap', {
+    event,
+    network: options.network,
+    fromToken: options.fromToken,
+    toToken: options.toToken,
+    swapProvider: options.swapProvider,
+    hasError: Boolean(options.error),
+    errorLength: redactText(options.error),
+  });
 };
 
 const trackBuyEvents = (
@@ -73,7 +102,12 @@ const trackSendEvents = (
     error?: string;
   },
 ) => {
-  metrics.track('send', { event, ...options });
+  metrics.track('send', {
+    event,
+    network: options.network,
+    hasError: Boolean(options.error),
+    errorLength: redactText(options.error),
+  });
 };
 
 const trackNFTEvents = (
