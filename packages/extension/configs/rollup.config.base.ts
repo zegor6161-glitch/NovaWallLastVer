@@ -34,6 +34,17 @@ const base: RollupOptions = {
       Buffer: ['buffer', 'Buffer'],
     }),
     nodeResolve({ preferBuiltins: false }),
+    {
+      name: 'fix-window-iife-callsite',
+      // Replace generated IIFE global call-site without introducing a global
+      // `window$1` variable that can shadow imported module aliases.
+      renderChunk(code) {
+        return code.replace(
+          /\}\)\(window\$1\);/g,
+          '})(typeof window !== "undefined" ? window : globalThis);',
+        );
+      },
+    },
   ],
 };
 
