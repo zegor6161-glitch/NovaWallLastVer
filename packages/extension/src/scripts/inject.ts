@@ -2,7 +2,7 @@ import {
   setWindowNamespace,
   windowOnMessage,
   providerSendMessage,
-} from '@/libs/messenger/window';
+} from '@/libs/messenger/bridge-window';
 import { ProviderName, ProviderType } from '@/types/provider';
 import EthereumProvider from '@/providers/ethereum/inject';
 import PolkadotProvider from '@/providers/polkadot/inject';
