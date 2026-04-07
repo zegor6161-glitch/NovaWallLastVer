@@ -5,10 +5,8 @@ import inject from '@rollup/plugin-inject';
 import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
 import packageJson from '../package.json' with { type: 'json' };
-import { RollupOptions, OutputOptions } from 'rollup';
-import terser from '@rollup/plugin-terser';
+import { RollupOptions } from 'rollup';
 
-const enableMinification = process.env.MINIFY === 'true';
 const base: RollupOptions = {
   logLevel: 'silent',
   watch: {
@@ -17,7 +15,7 @@ const base: RollupOptions = {
   output: {
     dir: 'scripts',
     format: 'iife',
-    sourcemap: !enableMinification,
+    sourcemap: true,
   },
   plugins: [
     replace({
@@ -38,8 +36,5 @@ const base: RollupOptions = {
     nodeResolve({ preferBuiltins: false }),
   ],
 };
-if (enableMinification) {
-  (base.output as OutputOptions).plugins = [terser()];
-}
 
 export default base;
