@@ -13,8 +13,6 @@ import SolanaProvider from '@/providers/solana/inject';
 import { InternalMethods } from '@/types/messenger';
 
 setWindowNamespace();
-// SECURITY: injected provider exposes only request interfaces and public account data
-// after explicit approval; seed phrases/private keys/passwords are never exposed to pages.
 (window as Window).enkrypt = {
   providers: {},
   settings: {},
