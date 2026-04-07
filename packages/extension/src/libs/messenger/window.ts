@@ -1,7 +1,7 @@
 import {
-  setNamespace,
-  onMessage,
-  sendMessage,
+  setNamespace as bridgeSetNamespace,
+  onMessage as bridgeOnMessage,
+  sendMessage as bridgeSendMessage,
 } from '@enkryptcom/extension-bridge/dist/window';
 import { EXTENSION_NAMESPACE } from '@/configs/constants';
 import {
@@ -17,7 +17,7 @@ import { ProviderName } from '@/types/provider';
 export const sendToBackgroundFromWindow = (
   message: SendMessage,
 ): Promise<OnMessageResponse> => {
-  return sendMessage(
+  return bridgeSendMessage(
     MessageType.WINDOW_REQUEST,
     message,
     Destination.background,
@@ -37,11 +37,11 @@ export const providerSendMessage = (
   });
 };
 export const setWindowNamespace = (): void => {
-  setNamespace(EXTENSION_NAMESPACE);
+  bridgeSetNamespace(EXTENSION_NAMESPACE);
 };
 
 export const windowOnMessage = (cb: onMessageType): void => {
-  onMessage(MessageType.WINDOW_REQUEST, async message => {
+  bridgeOnMessage(MessageType.WINDOW_REQUEST, async message => {
     if (message.sender.context !== 'background') {
       throw new Error('Message didnt come from background');
     }
