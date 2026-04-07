@@ -15,11 +15,6 @@ const base: RollupOptions = {
   output: {
     dir: 'scripts',
     format: 'iife',
-    // Some rollup/plugin combinations can emit an IIFE call-site that references
-    // `window$1` in the final bundle, for example `})(window$1);`.
-    // `banner` is emitted before the wrapper, so the alias exists at call-site.
-    banner:
-      'var window$1 = typeof window !== "undefined" ? window : globalThis;',
     sourcemap: true,
   },
   plugins: [
@@ -39,6 +34,17 @@ const base: RollupOptions = {
       Buffer: ['buffer', 'Buffer'],
     }),
     nodeResolve({ preferBuiltins: false }),
+    {
+      name: 'fix-window-iife-callsite',
+      // Replace generated IIFE global call-site without introducing a global
+      // `window$1` variable that can shadow imported module aliases.
+      renderChunk(code) {
+        return code.replace(
+          /\}\)\(window\$1\);/g,
+          '})(typeof window !== "undefined" ? window : globalThis);',
+        );
+      },
+    },
   ],
 };
 
