@@ -18,7 +18,7 @@ const base: RollupOptions = {
   output: {
     dir: 'scripts',
     format: 'iife',
-    sourcemap: !enableMinification,
+    sourcemap: true,
   },
   plugins: [
     replace({
