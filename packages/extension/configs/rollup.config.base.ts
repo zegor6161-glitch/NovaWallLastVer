@@ -5,7 +5,10 @@ import inject from '@rollup/plugin-inject';
 import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
 import packageJson from '../package.json' with { type: 'json' };
-import { RollupOptions } from 'rollup';
+import { RollupOptions, OutputOptions } from 'rollup';
+import terser from '@rollup/plugin-terser';
+
+const enableMinification = process.env.MINIFY === 'true';
 
 const base: RollupOptions = {
   logLevel: 'silent',
@@ -34,7 +37,22 @@ const base: RollupOptions = {
       Buffer: ['buffer', 'Buffer'],
     }),
     nodeResolve({ preferBuiltins: false }),
+    {
+      name: 'fix-window-iife-callsite',
+      // Replace generated IIFE global call-site without introducing a global
+      // `window$1` variable that can shadow imported module aliases.
+      renderChunk(code) {
+        return code.replace(
+          /\}\)\(window\$1\);/g,
+          '})(typeof window !== "undefined" ? window : globalThis);',
+        );
+      },
+    },
   ],
 };
+
+if (enableMinification) {
+  (base.output as OutputOptions).plugins = [terser()];
+}
 
 export default base;
