@@ -5,7 +5,10 @@ import inject from '@rollup/plugin-inject';
 import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
 import packageJson from '../package.json' with { type: 'json' };
-import { RollupOptions } from 'rollup';
+import { RollupOptions, OutputOptions } from 'rollup';
+import terser from '@rollup/plugin-terser';
+
+const enableMinification = process.env.MINIFY === 'true';
 
 const base: RollupOptions = {
   logLevel: 'silent',
@@ -15,12 +18,7 @@ const base: RollupOptions = {
   output: {
     dir: 'scripts',
     format: 'iife',
-    // Some rollup/plugin combinations can emit an IIFE call-site that references
-    // `window$1` in the final bundle. Define it explicitly to avoid runtime
-    // crashes like "ReferenceError: window$1 is not defined" on page context.
-    intro:
-      'var window$1 = typeof window !== "undefined" ? window : globalThis;',
-    sourcemap: true,
+    sourcemap: !enableMinification,
   },
   plugins: [
     replace({
@@ -41,5 +39,9 @@ const base: RollupOptions = {
     nodeResolve({ preferBuiltins: false }),
   ],
 };
+
+if (enableMinification) {
+  (base.output as OutputOptions).plugins = [terser()];
+}
 
 export default base;
