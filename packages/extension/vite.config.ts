@@ -102,8 +102,8 @@ export default defineConfig({
   build: {
     commonjsOptions: { transformMixedEsModules: true },
     emptyOutDir: true,
-    sourcemap: process.env.MINIFY === 'true' ? false : true,
-    minify: process.env.MINIFY === 'true' ? 'esbuild' : false,
+    sourcemap: true,
+    minify: false,
     rollupOptions: {
       plugins: [],
       external: [],
@@ -123,7 +123,10 @@ export default defineConfig({
   },
   resolve: {
     alias: [
-      { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
+      {
+        find: '@',
+        replacement: fileURLToPath(new URL('./src', import.meta.url)),
+      },
       {
         find: '@action',
         replacement: fileURLToPath(new URL('./src/ui/action', import.meta.url)),
@@ -133,13 +136,19 @@ export default defineConfig({
       {
         find: /^@noble\/curves\/(.*)\.js$/,
         replacement: fileURLToPath(
-          new URL('../../crypto-libs-snapshot/@noble/curves/esm/$1.js', import.meta.url),
+          new URL(
+            '../../crypto-libs-snapshot/@noble/curves/esm/$1.js',
+            import.meta.url,
+          ),
         ),
       },
       {
         find: /^@noble\/curves\/(.*)$/,
         replacement: fileURLToPath(
-          new URL('../../crypto-libs-snapshot/@noble/curves/esm/$1.js', import.meta.url),
+          new URL(
+            '../../crypto-libs-snapshot/@noble/curves/esm/$1.js',
+            import.meta.url,
+          ),
         ),
       },
     ],

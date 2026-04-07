@@ -93,6 +93,7 @@ import SignLogo from '@action/icons/common/sign-logo.vue';
 import BaseButton from '@action/components/base-button/index.vue';
 import CommonPopup from '@action/views/common-popup/index.vue';
 import { getError } from '@/libs/error';
+import { track } from '@/libs/analytics';
 import { ErrorCodes } from '@/providers/ethereum/types';
 import { WindowPromiseHandler } from '@/libs/window-promise';
 import { onBeforeMount, ref } from 'vue';
