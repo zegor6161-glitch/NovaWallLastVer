@@ -89,7 +89,7 @@ This extension is submitted as a wallet product, not surveillance software:
 
 For Chrome Web Store review, we prepare a dedicated build profile with `VITE_CWS_REVIEW_BUILD=true` that:
 
-- disables promo/reward/survey surfaces;
+- keeps promo/reward/survey surfaces disabled (these non-core UI surfaces are now permanently disabled, including review builds);
 - disables telemetry senders;
 - disables remote backup/sync flows.
 
@@ -117,3 +117,17 @@ Reviewer mini-checklist:
 4. **Interpretation for CWS moderation**
    - Review build limits extension behavior to core self-custody wallet purpose.
    - Non-core monetization/telemetry/backup surfaces are intentionally excluded for review clarity.
+
+## 11) CSP `wasm-unsafe-eval` clarification
+
+`wasm-unsafe-eval` remains in extension-page CSP because the wallet includes bundled local wasm crypto dependencies used by signing stacks (notably Polkadot/sr25519/ed25519 support via `@polkadot/wasm-crypto`).
+
+This capability is used for local cryptographic operations only. It is not used to fetch or execute arbitrary remote code.
+
+## 12) Trezor bundled script disclosure
+
+Trezor support is currently integrated and not removed in this change set to avoid risky cross-package refactors in hardware-wallet flows.
+
+`public/vendor/trezor-content-script.js` is a static bundled asset shipped inside the extension package (not dynamically downloaded at runtime). The script itself contains `VERSION = "9.4.1"` for Trezor Connect endpoint coordination.
+
+The extension does not use this integration as a generic remote code loader; it is scoped to Trezor-connect interoperability paths.

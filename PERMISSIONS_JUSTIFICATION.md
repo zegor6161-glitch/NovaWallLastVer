@@ -41,13 +41,19 @@
 
 ### *://connect.trezor.io/*/*
 - Why: Hardware wallet integration support.
-- Feature: Trezor connect content script workflow.
+- Feature: Trezor connect content script workflow (hardware-wallet interoperability only).
 - Code: `configs/vite/transform-manifest.ts`, `public/vendor/trezor-content-script.js`.
-- Removable: Yes if Trezor support removed.
+- Removable: Yes if Trezor support is fully removed through dedicated refactor; not changed in this pass to avoid breakage risk for hardware-wallet abstractions.
 - Review risk: Medium.
 
 ## other manifest surfaces
 
 - `externally_connectable`: not configured.
 - `web_accessible_resources`: limited to local injection scripts for provider bridge.
-- CSP: extension pages use `'self'` plus `'wasm-unsafe-eval'` for bundled wasm compatibility.
+- CSP: extension pages use `'self'` plus `'wasm-unsafe-eval'` for bundled local wasm crypto compatibility (e.g., `@polkadot/wasm-crypto` signing paths).
+- `wasm-unsafe-eval` is not used to load or execute arbitrary remote code; extension logic is shipped in-package.
+
+
+## non-core surfaces
+
+- Promo/reward/survey UI surfaces are non-core and are disabled in current builds, including CWS review builds, to preserve a wallet-only reviewer experience.
