@@ -1,1 +1,1 @@
-Browser extension wallet for managing crypto accounts, connecting to dApps, and signing transactions.
+Self-custody browser wallet for Bitcoin, Ethereum/EVM, and Solana: connect dApps and approve signing/transactions with local key handling.
