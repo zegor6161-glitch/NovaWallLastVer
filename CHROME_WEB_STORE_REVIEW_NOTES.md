@@ -2,7 +2,7 @@
 
 ## 1) What this extension is
 
-Nova Wallet is a **browser extension cryptocurrency wallet**. It provides account management, signing, and transaction workflows for supported networks, and injects wallet providers for dApp connectivity.
+Nova Wallet is a **browser extension cryptocurrency wallet**. It provides account management, signing, and transaction workflows for supported networks (including Bitcoin, Ethereum/EVM, and Solana), and injects wallet providers for dApp connectivity.
 
 ## 2) Single purpose
 
@@ -11,7 +11,6 @@ Nova Wallet is a **browser extension cryptocurrency wallet**. It provides accoun
 ## 3) Sensitive credentials handling
 
 - Seed phrase (mnemonic), private keys, and wallet password are handled locally in extension workflows.
-- Recent hardening removed prior direct mnemonic/seed transmission paths and hidden wallet mapping transmission behavior.
 
 Additional security/privacy clarification for review:
 

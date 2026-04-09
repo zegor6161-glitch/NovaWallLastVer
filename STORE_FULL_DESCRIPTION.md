@@ -1,35 +1,37 @@
 # Nova Wallet
 
-Nova Wallet is a browser extension cryptocurrency wallet for managing accounts, connecting to decentralized applications (dApps), and approving blockchain transactions on supported networks.
+Nova Wallet is a browser extension cryptocurrency wallet for **Bitcoin, Ethereum/EVM, and Solana**.
 
-## Single-purpose product
+## Single purpose
 
-Nova Wallet is built for one core purpose: **self-custody wallet functionality in the browser**.
+Nova Wallet has one core purpose: **self-custody wallet functionality in the browser**.
 
-## Core capabilities
+## Core wallet actions
 
-- Create or restore wallet accounts
-- Manage supported network accounts and assets
-- View balances, token holdings, and NFT-related data (where supported)
+- Create a new wallet or import an existing wallet
+- View wallet addresses, balances, and supported asset data
 - Connect to compatible dApps through injected wallet providers
-- Review and approve signature and transaction requests
-- Send assets and interact with supported network features
+- Review and approve or reject signature requests
+- Review and approve or reject transaction requests
 
-## Privacy and credential handling summary
+## Permission rationale (plain language)
 
-- Sensitive credentials (seed phrase, private keys, wallet password) are handled locally in wallet workflows.
-- Public account identifiers (such as wallet addresses) are processed as needed for wallet operations such as balance checks and transaction handling.
-- The extension does not sell user data.
+- Broad website matching is used so compatible dApps can detect/connect to the wallet provider on sites the user opens.
+- Storage permissions persist encrypted wallet state and user settings locally.
+- Tabs permission supports wallet-initiated navigation flows (for example onboarding/support/hardware-wallet steps).
+- Clipboard write is used for explicit user copy actions (for example copying a public address).
 
-## Network activity you should expect
+## Data handling summary
 
-As part of normal wallet operation, the extension may contact:
+- **Handled locally:** seed phrase, private keys, wallet password, encrypted wallet state.
+- **Sent for wallet operation:** blockchain RPC requests, balance/state queries, transaction-related requests, and optional user-invoked provider APIs (for example swap/buy paths when used).
+- **Never intentionally sent as plaintext by the extension:** seed phrase, private keys, wallet password.
+- The extension does **not** sell user data.
 
-- blockchain RPC and infrastructure endpoints,
-- token/NFT/transaction data providers,
-- feature-specific provider APIs (for example, swap/buy integrations when used),
-- optional operational services used by the product.
+## Review-build note for moderation
 
-## Important notice
+For Chrome Web Store review builds (`VITE_CWS_REVIEW_BUILD=true`), non-core telemetry and remote backup flows are disabled so review scope remains on core wallet behavior.
 
-No wallet can guarantee absolute security. Users should protect seed phrases, verify transaction details, and keep browser/device environments secure.
+## Security reminder
+
+No software wallet can guarantee absolute security. Users should protect their recovery phrase, verify transaction details, and keep browser/device environments secure.

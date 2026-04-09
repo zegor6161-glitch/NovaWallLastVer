@@ -1,15 +1,27 @@
 # DATA_DISCLOSURE_SUMMARY
 
-Processed locally:
-- Wallet state, account metadata, settings, and caches.
-- Seed phrase/private keys/password during local wallet operations.
+## Processed locally
 
-Sent over network for wallet functionality:
-- RPC requests, token/NFT/transaction data queries, transaction broadcast.
+- Seed phrase, private keys, wallet password during wallet setup/unlock/signing.
+- Encrypted wallet state, account metadata, settings, and local caches.
 
-Optional/controlled:
-- Telemetry (opt-in, disabled in CWS review build).
-- Remote backup (feature-gated off in CWS review build).
+## Sent over network for wallet functionality
 
-Never intentionally transmitted as plaintext:
-- Seed phrase, private keys, password.
+- Blockchain RPC requests/responses for account state and transaction workflows.
+- Public account identifiers (for example wallet addresses) when needed for balance/history/NFT/transaction operations.
+- Optional user-invoked provider API traffic (for example swap/buy-related providers when those features are used).
+
+## Optional and controlled
+
+- Telemetry (opt-in by settings; disabled in CWS review build mode).
+- Remote backup network flows (optional feature; disabled in CWS review build mode).
+
+## Never intentionally transmitted as plaintext by the extension
+
+- Seed phrase / mnemonic.
+- Private keys.
+- Wallet password.
+
+## Additional disclosure
+
+- The extension does **not** sell user data.

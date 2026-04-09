@@ -1,6 +1,6 @@
 # REVIEWER_NOTES_DRAFT
 
-Nova Wallet is a self-custody browser wallet extension.
+Nova Wallet is a self-custody browser wallet extension for Bitcoin, Ethereum/EVM, and Solana.
 
 - Single purpose: local wallet management + dApp connection/signing.
 - Sensitive credentials (seed phrase/private key/password) are handled locally.
