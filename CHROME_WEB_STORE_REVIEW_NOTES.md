@@ -89,7 +89,7 @@ This extension is submitted as a wallet product, not surveillance software:
 
 For Chrome Web Store review, we prepare a dedicated build profile with `VITE_CWS_REVIEW_BUILD=true` that:
 
-- keeps promo/reward/survey surfaces disabled (these non-core UI surfaces are now permanently disabled, including review builds);
+- keeps scope on core wallet functionality;
 - disables telemetry senders;
 - disables remote backup/sync flows.
 
@@ -105,7 +105,6 @@ Reviewer mini-checklist:
 
 2. **Check what should be absent in review build**
    - Telemetry event sending should be disabled.
-   - Promo/survey/reward UI surfaces should not be shown.
    - Remote backup non-core surfaces should be disabled.
 
 3. **Check what remains available (core wallet only)**
@@ -116,7 +115,7 @@ Reviewer mini-checklist:
 
 4. **Interpretation for CWS moderation**
    - Review build limits extension behavior to core self-custody wallet purpose.
-   - Non-core monetization/telemetry/backup surfaces are intentionally excluded for review clarity.
+   - Review build intentionally excludes non-core telemetry and remote backup flows for review clarity.
 
 ## 11) CSP `wasm-unsafe-eval` clarification
 

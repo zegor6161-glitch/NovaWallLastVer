@@ -54,27 +54,21 @@ It is reviewer-facing and focused on purpose, data scope, and review-build behav
 | `analytics-enkrypt.mewwallet.dev/product-events` (or `VITE_ANALYTICS_ENDPOINT`) | Product event telemetry pipeline | Event names, timestamps, sanitized non-sensitive event properties, local analytics identifier | Optional | Yes (when telemetry setting enabled) | **Yes** (`VITE_CWS_REVIEW_BUILD=true`) | Review build gate explicitly blocks telemetry sending paths. |
 | `analytics-enkrypt.mewwallet.dev/record` (legacy metrics path) | Legacy metrics pipeline | Non-sensitive metrics/event payloads | Optional | Yes | **Yes** (`VITE_CWS_REVIEW_BUILD=true`) | Disabled by same review-build telemetry gate. |
 
-## 7) Promo / survey / reward surfaces
-
-| Domain / service | Purpose | Data involved | Required or optional | Used in normal build? | Disabled in review build? | Reviewer note |
-|---|---|---|---|---|---|---|
-| Promo-linked destinations (e.g., `mainnetfaucet.com`, `staking.enkrypt.com`, `tally.so`) | Reward/survey/promo UI destinations opened from optional banners/popups | Standard browser navigation metadata; user leaves extension context on click | Optional, non-core | Yes (normal build when surfaces are shown) | **Yes** (promo surfaces hidden by review-build gate) | In review build these surfaces are intentionally suppressed to keep scope core-wallet-only. |
-
-## 8) Backup / sync / support services
+## 7) Backup / sync / support services
 
 | Domain / service | Purpose | Data involved | Required or optional | Used in normal build? | Disabled in review build? | Reviewer note |
 |---|---|---|---|---|---|---|
 | `backupstore.enkrypt.com` | Remote encrypted backup list/get/create/delete/restore | Public key path params, signature query param, encrypted backup payload blob (account metadata encrypted client-side) | Optional, non-core | Yes (if user enables/uses backup) | **Yes** (`VITE_CWS_REVIEW_BUILD=true`) | Review build disables remote backup network flows. |
 | Support/help links (`help.myetherwallet.com`, support mail links) | User support documentation/navigation | Standard link navigation only | Optional | Yes | No | Informational/support resources, not wallet transaction backends. |
 
-## 9) Third-party hardware wallet integrations
+## 8) Third-party hardware wallet integrations
 
 | Domain / service | Purpose | Data involved | Required or optional | Used in normal build? | Disabled in review build? | Reviewer note |
 |---|---|---|---|---|---|---|
 | `connect.trezor.io` | Trezor Connect bridge for hardware wallet workflows | Hardware-wallet session and signing request metadata (not seed phrase/private key export) | Optional (only for Trezor users) | Yes (when user uses Trezor flow) | No | Hardware-wallet integration endpoint family. |
 | Ledger transport stack (WebUSB) | Ledger hardware signing transport | Device/app interaction payloads over local transport | Optional (only for Ledger users) | Yes | No | Primarily local hardware transport; external service hosts **to verify from vendor/runtime behavior**. |
 
-## 10) Other external services
+## 9) Other external services
 
 | Domain / service | Purpose | Data involved | Required or optional | Used in normal build? | Disabled in review build? | Reviewer note |
 |---|---|---|---|---|---|---|
@@ -84,4 +78,6 @@ It is reviewer-facing and focused on purpose, data scope, and review-build behav
 
 ## Review-build interpretation
 
-With `VITE_CWS_REVIEW_BUILD=true`, the project explicitly gates off telemetry, promo/survey/reward surfaces, and remote backup flows, leaving core wallet behavior for review.
+With `VITE_CWS_REVIEW_BUILD=true`, the project explicitly gates off telemetry and remote backup flows, leaving core wallet behavior for review.
+
+Promo/reward/survey surfaces are not part of the current wallet UX and are therefore not included in this endpoint disclosure scope.

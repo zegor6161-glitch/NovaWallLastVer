@@ -54,6 +54,3 @@
 - `wasm-unsafe-eval` is not used to load or execute arbitrary remote code; extension logic is shipped in-package.
 
 
-## non-core surfaces
-
-- Promo/reward/survey UI surfaces are non-core and are disabled in current builds, including CWS review builds, to preserve a wallet-only reviewer experience.
