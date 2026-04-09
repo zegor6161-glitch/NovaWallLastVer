@@ -3,7 +3,7 @@
 ## Current recommendation: CONDITIONAL GO
 
 Go criteria met:
-- CWS review build mode added to suppress non-core promo, telemetry, and backup optics.
+- CWS review build mode keeps scope on core wallet behavior by disabling telemetry and remote backup flows.
 - Provider injection and broad host access justification documented.
 - Remote code audit and permissions rationale documented.
 

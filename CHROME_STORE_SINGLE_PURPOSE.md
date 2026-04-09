@@ -8,5 +8,3 @@ Included in scope:
 - Connecting to dApps.
 - User-approved signing and transaction submission.
 
-Out of scope for submission profile:
-- Promotional/reward/survey surfaces.
