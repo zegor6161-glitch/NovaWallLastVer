@@ -35,6 +35,27 @@ The extension uses content scripts and provider injection on user-visited websit
 
 Additional targeted matching is used for Trezor connect integration paths.
 
+## Why all-sites + MAIN world is required for provider interoperability
+
+Browser wallets use an established provider pattern: dApps expect a wallet provider object to be available on the page context (`window`) when the user opens a dApp.
+
+For that reason, Nova Wallet keeps provider injection available on user-visited sites and uses MAIN world/page context so dApp discovery and interoperability patterns (including standard wallet-provider discovery flows) work as expected.
+
+In practical terms, this access is used to:
+
+- expose wallet provider interfaces to dApps;
+- receive dApp-initiated connect/sign/transaction requests;
+- forward those requests to extension UI for explicit user decision.
+
+This access is **not** used for ad-tech, hidden tracking, arbitrary content manipulation, scraping user sessions, or non-purpose monitoring.
+
+Threat boundary (reviewer-facing):
+
+- The extension **does** provide provider interoperability and wallet request routing.
+- The extension **does not** auto-approve account access, signatures, or transactions.
+- Connect/sign/send actions occur only when initiated by user interaction with a dApp and then confirmed in wallet UI.
+- Account connection, message signing, and transaction approval require explicit user interaction.
+
 ## 6) Remote code / runtime logic
 
 Extension logic is shipped in the extension package. The extension makes network/API requests for wallet operations, but is not intended to use remote code to dynamically replace extension logic at runtime.
@@ -73,3 +94,26 @@ For Chrome Web Store review, we prepare a dedicated build profile with `VITE_CWS
 - disables remote backup/sync flows.
 
 This keeps reviewer scope centered on core wallet functionality (self-custody, signing, dApp connectivity).
+
+## How to verify review-build behavior
+
+Reviewer mini-checklist:
+
+1. **Confirm build context**
+   - Verify review artifact/release notes indicate `VITE_CWS_REVIEW_BUILD=true`.
+   - Verify this build is intended as the Chrome Web Store review package.
+
+2. **Check what should be absent in review build**
+   - Telemetry event sending should be disabled.
+   - Promo/survey/reward UI surfaces should not be shown.
+   - Remote backup non-core surfaces should be disabled.
+
+3. **Check what remains available (core wallet only)**
+   - Wallet create/import/unlock flows.
+   - Account view and asset/balance visibility.
+   - dApp connection request handling.
+   - User-approved signing and transaction approval flows.
+
+4. **Interpretation for CWS moderation**
+   - Review build limits extension behavior to core self-custody wallet purpose.
+   - Non-core monetization/telemetry/backup surfaces are intentionally excluded for review clarity.
