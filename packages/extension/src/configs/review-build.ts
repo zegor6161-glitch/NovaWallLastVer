@@ -7,4 +7,5 @@ export const isTelemetryAllowed = (): boolean => !IS_CWS_REVIEW_BUILD;
 
 export const isBackupFeatureAllowed = (): boolean => !IS_CWS_REVIEW_BUILD;
 
-export const isPromoSurfaceAllowed = (): boolean => !IS_CWS_REVIEW_BUILD;
+// Non-core promo/reward/survey surfaces are permanently disabled to keep wallet UX single-purpose.
+export const isPromoSurfaceAllowed = (): boolean => false;
