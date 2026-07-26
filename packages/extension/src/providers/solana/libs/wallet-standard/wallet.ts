@@ -61,7 +61,7 @@ export class EnkryptWallet implements Wallet {
     [E in StandardEventsNames]?: StandardEventsListeners[E][];
   } = {};
   readonly #version = '1.0.0' as const;
-  readonly #name = 'Enkrypt' as const;
+  readonly #name = 'Terenval Wallet' as const;
   readonly #icon = icon;
   #accounts: EnkryptWalletAccount[] | null = null;
   readonly #enkrypt: Enkrypt;

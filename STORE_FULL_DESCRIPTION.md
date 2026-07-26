@@ -1,10 +1,10 @@
-# Nova Wallet
+# Terenval Wallet
 
-Nova Wallet is a browser extension cryptocurrency wallet for **Bitcoin, Ethereum/EVM, and Solana**.
+Terenval Wallet is a browser extension cryptocurrency wallet for **Bitcoin, Ethereum/EVM, and Solana**.
 
 ## Single purpose
 
-Nova Wallet has one core purpose: **self-custody wallet functionality in the browser**.
+Terenval Wallet has one core purpose: **self-custody wallet functionality in the browser**.
 
 ## Core wallet actions
 

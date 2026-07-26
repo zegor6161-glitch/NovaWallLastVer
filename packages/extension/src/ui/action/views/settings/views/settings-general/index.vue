@@ -18,7 +18,7 @@
     />
     <div v-if="!isCwsReviewBuild" class="settings__label">
       <p>
-        Pause Nova Wallet interactions with Ethereum DApps if you are using other
+        Pause Terenval Wallet interactions with Ethereum DApps if you are using other
         web3 extensions
       </p>
     </div>
@@ -38,7 +38,7 @@
       @update:check="toggleUnisatEnable"
     />
     <div class="settings__label">
-      <p>Enable Nova Wallet to act like a Unisat wallet for dApps</p>
+      <p>Enable Terenval Wallet to act like a Unisat wallet for dApps</p>
     </div>
 
     <settings-switch
@@ -49,7 +49,7 @@
     />
     <div class="settings__label">
       <p>
-        Anonymous product analytics helps us improve Nova Wallet. This never includes seed phrase, private keys, passwords, raw signatures, or full transaction data.
+        Anonymous product analytics helps us improve Terenval Wallet. This never includes seed phrase, private keys, passwords, raw signatures, or full transaction data.
       </p>
     </div>
     <settings-button
@@ -71,7 +71,7 @@
     ></base-select> -->
 
     <!-- <div class="settings__label">
-      <p>Set the idle time in minutes before Nova Wallet will become locked.</p>
+      <p>Set the idle time in minutes before Terenval Wallet will become locked.</p>
     </div> -->
   </div>
 </template>

@@ -25,9 +25,9 @@ export class CustomEvmNetwork extends EvmNetwork {
       icon,
       activityHandler: wrapActivityHandler(() => Promise.resolve([])),
       blockExplorerAddr:
-        options.blockExplorerAddr ?? 'https://www.enkrypt.com/',
-      blockExplorerTX: options.blockExplorerTX ?? 'https://www.enkrypt.com/',
-      homePage: 'https://www.enkrypt.com/',
+        options.blockExplorerAddr ?? 'https://terenval.com/',
+      blockExplorerTX: options.blockExplorerTX ?? 'https://terenval.com/',
+      homePage: 'https://terenval.com/',
       isTestNetwork: false,
       name: networkName,
     };

@@ -12,10 +12,10 @@
       route.name == 'create-wallet-wallet-ready' ||
       route.name == 'restore-wallet-wallet-ready'
     " class="onboard__info">
-      <h4>Pin the Nova Wallet extension</h4>
+      <h4>Pin the Terenval Wallet extension</h4>
       <p>Click on <extension-icon /> in your browser</p>
       <p>
-        Find <online-icon class="onboard__online" /> Nova Wallet and click
+        Find <online-icon class="onboard__online" /> Terenval Wallet and click
         <pin-icon /> to pin it
       </p>
     </div>
@@ -39,7 +39,7 @@ onMounted(async () => {
   isGeoRestricted().then(restricted => {
     if (restricted) {
       window.open(
-        'https://help.myetherwallet.com/en/articles/12897302-geographic-restrictions-for-mew',
+        'https://terenval.com/support/',
         '_blank',
         'noopener',
       );

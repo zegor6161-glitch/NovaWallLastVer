@@ -11,12 +11,12 @@ function injectScript() {
     scriptTag.src = injectURL;
     scriptTag.id = InjectedIDs.main;
     scriptTag.onload = function () {
-      console.info('Enkrypt: Hello from CS');
+      console.info('Terenval Wallet: Hello from CS');
       container.removeChild(scriptTag);
     };
     container.insertBefore(scriptTag, container.children[0]);
   } catch (error) {
-    console.error('Enkrypt: Provider injection failed.', error);
+    console.error('Terenval Wallet: Provider injection failed.', error);
   }
 }
 

@@ -44,7 +44,7 @@ const method: MiddlewareFunction = async function (
       if (_payload.options && _payload.options.domain) {
         isAccountAccessPending = true;
         if (!isInitialized) {
-          _res(getCustomError('Enkrypt not initialized'));
+          _res(getCustomError('Terenval Wallet not initialized'));
           throttledOpenOnboard();
           return handleRemainingPromises();
         }

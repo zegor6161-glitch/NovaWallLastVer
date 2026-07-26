@@ -62,4 +62,4 @@ window.addEventListener('beforeunload', () => {
     JSON.stringify({ method: InternalMethods.newWindowUnload }),
   );
 });
-console.info('Enkrypt: Hello from IN');
+console.info('Terenval Wallet: Hello from IN');

@@ -2,7 +2,7 @@
   <div class="add-hardware-wallet">
     <hardware-icon />
     <h3>Add hardware wallet account</h3>
-    <p>Select a hardware wallet you'd like to use with Nova Wallet.</p>
+    <p>Select a hardware wallet you'd like to use with Terenval Wallet.</p>
 
     <router-link
       v-if="isLedgerSupported"

@@ -103,14 +103,14 @@ class BackgroundHandler {
         });
       }
       return {
-        error: JSON.stringify(getCustomError('Enkrypt: not implemented')),
+        error: JSON.stringify(getCustomError('Terenval Wallet: not implemented')),
       };
     }
     if (this.#geoRestricted !== undefined && this.#geoRestricted) {
       return {
         error: JSON.stringify(
           getCustomError(
-            'Enkrypt: Geo restricted https://www.myetherwallet.com/blocked',
+            'Terenval Wallet: geographic access restricted. See https://terenval.com/support/',
           ),
         ),
       };

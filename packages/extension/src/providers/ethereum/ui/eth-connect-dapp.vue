@@ -60,8 +60,8 @@
           <div v-else class="provider-connect-dapp__permissions-error">
             <p>
               Your wallet address is restricted. Please contact
-              <a href="mailto:support@myetherwallet.com"
-                >support@myetherwallet.com</a
+              <a href="mailto:support@terenval.com"
+                >support@terenval.com</a
               >
               for assistance.
             </p>

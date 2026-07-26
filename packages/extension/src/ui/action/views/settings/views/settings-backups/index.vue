@@ -6,7 +6,7 @@
         <p>
           Save your current list of accounts across all networks, so you don't
           need to re-generate them when you import or restore your wallet with
-          Nova Wallet. You will still need your recovery phrase. We only back up
+          Terenval Wallet. You will still need your recovery phrase. We only back up
           non-vital information such as account names and derivation paths. Your
           sensitive information, like your mnemonic and private keys, is never
           backed up.

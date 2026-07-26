@@ -1,7 +1,7 @@
 <template>
   <div v-if="showPromo" class="survey-popup">
     <div class="survey-popup__content">
-      <h5>Help us improve Nova Wallet</h5>
+      <h5>Help us improve Terenval Wallet</h5>
       <p>Please take a quick survey. We appreciate you!</p>
       <a href="javascript:void(0);" @click="openSurveyLink" class="button"
         ><span>Click here</span></a

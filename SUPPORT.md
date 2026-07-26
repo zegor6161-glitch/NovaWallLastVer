@@ -1,10 +1,10 @@
 # Support
 
-For support requests related to Nova Wallet extension:
+For support requests related to Terenval Wallet extension:
 
-- Support email: `TODO: set production support email before Chrome Web Store submission`
-- Privacy email: `TODO: set production privacy email before Chrome Web Store submission`
-- Support URL: `TODO: set production support URL before Chrome Web Store submission`
+- Support email: `support@terenval.com`
+- Privacy email: `support@terenval.com`
+- Support URL: `https://terenval.com/support/`
 
 ## Recommended issue template
 
