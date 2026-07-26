@@ -45,7 +45,7 @@ export interface BaseNetworkOptions {
 }
 
 /**
- * The main representation of a network in the Enkrypt extension.
+ * The main representation of a network in the Terenval Wallet extension.
  *
  * Instantiated from a mostly static network config.
  *

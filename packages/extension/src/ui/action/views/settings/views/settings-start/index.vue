@@ -18,9 +18,14 @@
         @click="bugAction"
       />
       <settings-button
-        title="Privacy and terms"
+        title="Privacy policy"
         :is-link="true"
         @click="privacyAction"
+      />
+      <settings-button
+        title="Terms of use"
+        :is-link="true"
+        @click="termsAction"
       />
       <settings-button title="About" @click="$emit('action:about')" />
     </div>
@@ -36,7 +41,7 @@
 
     <div class="settings__copyright">
       <p>Version {{ version }} ({{ buildTime }})</p>
-      <p>© {{ new Date().getFullYear() }} Nova Wallet</p>
+      <p>© {{ new Date().getFullYear() }} Terenval Wallet</p>
     </div>
 
     <modal-sign
@@ -74,24 +79,24 @@ defineEmits<{
 }>();
 
 const bugAction = () => {
-  window.open(
-    'https://hackerone.com/myetherwallet?type=team',
-    '_blank',
-    'noopener',
-  );
+  window.open('https://terenval.com/security/', '_blank', 'noopener');
 };
 
 const privacyAction = () => {
   window.open(
-    'https://www.myetherwallet.com/privacy-policy',
+    'https://terenval.com/privacy/',
     '_blank',
     'noopener',
   );
 };
 
+const termsAction = () => {
+  window.open('https://terenval.com/terms/', '_blank', 'noopener');
+};
+
 const contactSupport = () => {
   window.open(
-    'https://www.enkrypt.com/?ref=enkrypt_help',
+    'https://terenval.com/support/',
     '_blank',
     'noopener',
   );

@@ -12,7 +12,7 @@ It avoids promo/reward/survey surfaces and focuses on wallet intent.
 ## Test steps
 
 1. **Install extension**
-   - Load the submitted extension package in Chrome and pin/open Nova Wallet.
+   - Load the submitted extension package in Chrome and pin/open Terenval Wallet.
 
 2. **Open wallet UI**
    - Verify first-run onboarding appears and clearly presents wallet setup options.

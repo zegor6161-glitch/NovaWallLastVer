@@ -44,20 +44,11 @@
             }"
           >
             Bug fixes and improvements. <br />
-            With love from MEW Team.
+            With love from the Terenval Wallet team.
           </p>
           <a :href="version.release_link" target="_blank"
             >Full release notes
           </a>
-          <p class="updates__block__end">
-            Make sure you follow Nova Wallet on Twitter (X....ugh) and let us know
-            how we can build a better crypto product for you
-            <span>
-              <a href="https://x.com/enkrypt" target="_blank"
-                >https://x.com/enkrypt</a
-              ></span
-            >
-          </p>
         </div>
       </div>
     </div>

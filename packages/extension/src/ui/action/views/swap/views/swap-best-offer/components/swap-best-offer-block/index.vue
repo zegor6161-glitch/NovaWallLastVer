@@ -73,7 +73,7 @@
       </p>
       <p>
         Offer includes
-        {{ pickedTrade.fee.toFixed(3) }}% Nova Wallet fee
+        {{ pickedTrade.fee.toFixed(3) }}% Terenval Wallet fee
       </p>
       <p v-if="toReadableAdditionalFees !== '0'">
         Offer includes

@@ -14,15 +14,15 @@
     </p>
     <p>
       If you believe this has been incorrectly flagged, you can contact us at
-      <a class="blocked-page__support" href="mailto:support@myetherwallet.com"
-        >support@myetherwallet.com</a
+      <a class="blocked-page__support" href="mailto:support@terenval.com"
+        >support@terenval.com</a
       >.
     </p>
     <a
       class="blocked-page__more-info"
       target="_blank"
       rel="noopener noreferrer"
-      href="https://help.myetherwallet.com/en/articles/12897302-geographic-restrictions-for-mew"
+      href="https://terenval.com/support/"
       >More info</a
     >
     <div v-if="isInitialized">
@@ -116,7 +116,7 @@ const emit = defineEmits<{
 }>();
 
 const supportAction = () => {
-  window.open('mailto:support@myetherwallet.com', '_blank', 'noopener');
+  window.open('mailto:support@terenval.com', '_blank', 'noopener');
 };
 
 const isOpenSign = ref(false);

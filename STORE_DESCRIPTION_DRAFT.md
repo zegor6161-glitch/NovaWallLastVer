@@ -3,7 +3,7 @@
 Working draft aligned with `STORE_SHORT_DESCRIPTION.txt` and `STORE_FULL_DESCRIPTION.md`.
 Use this file only as an editing helper; submit final copy from the canonical store files.
 
-Nova Wallet is a self-custody browser wallet for Bitcoin, Ethereum/EVM, and Solana.
+Terenval Wallet is a self-custody browser wallet for Bitcoin, Ethereum/EVM, and Solana.
 
 Core capabilities:
 - Create/import wallet accounts.

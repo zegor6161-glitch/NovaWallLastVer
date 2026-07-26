@@ -1,6 +1,6 @@
 # Security Overview (High-Level)
 
-Nova Wallet is a client-side browser wallet. Sensitive credentials are handled locally for wallet creation, restore, unlock, and signing flows.
+Terenval Wallet is a client-side browser wallet. Sensitive credentials are handled locally for wallet creation, restore, unlock, and signing flows.
 
 ## Design principles
 

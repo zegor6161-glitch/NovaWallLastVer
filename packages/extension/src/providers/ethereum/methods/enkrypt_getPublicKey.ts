@@ -21,7 +21,7 @@ const method: MiddlewareFunction = async function (
     const isInitialized = await this.KeyRing.isInitialized();
     if (!isInitialized) {
       throttledOpenOnboard();
-      return res(getCustomError('Enkrypt not initialized'));
+      return res(getCustomError('Terenval Wallet not initialized'));
     } else {
       this.KeyRing.getAccounts([SignerType.secp256k1]).then(accounts => {
         res(null, accounts[0].publicKey);

@@ -42,7 +42,7 @@
             class="app__menu-dropdown-link"
             @click="emit('action:lock-enkrypt')"
           >
-            <hold-icon /> <span>Lock Nova Wallet</span>
+            <hold-icon /> <span>Lock Terenval Wallet</span>
           </button>
           <button class="app__menu-dropdown-link" @click="settingsAction">
             <settings-icon /> <span>Settings</span>

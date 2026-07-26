@@ -1,7 +1,7 @@
 <template>
   <div v-if="showPromo" class="reward-program-banner">
     <p class="reward-program-banner__headline">
-      Reward Program for Active Nova Wallet Users
+      Reward Program for Active Terenval Wallet Users
     </p>
     <p class="reward-program-banner__supporting">
       Explore the reward program on Mainnet Faucet.

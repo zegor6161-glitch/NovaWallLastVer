@@ -4,7 +4,7 @@
     <img src="enkrypt.png" alt="Logo">
   </a>
 
-  <h3 align="center">Enkrypt</h3>
+  <h3 align="center">Terenval Wallet</h3>
 
   <p align="center">
     Everything in the blockchain made easy
@@ -23,9 +23,9 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## About Enkrypt
+## About Terenval Wallet
 
-Enkrypt is a web3 wallet built from the ground up to support the multi-chain future. Send, receive, swap, manage your tokens and NFTs, and interact with dapps on all of your favorite chains with just a few clicks. With only one seed phrase for all of your accounts Enkrypt makes it easy to manage your assets and stay secure. If you're looking for that extra layer of security Enkrypt also supports popular hardware wallets such as Ledger and Trezor.
+Terenval Wallet is a web3 wallet built from the ground up to support the multi-chain future. Send, receive, swap, manage your tokens and NFTs, and interact with dapps on all of your favorite chains with just a few clicks. With only one seed phrase for all of your accounts Terenval Wallet makes it easy to manage your assets and stay secure. If you're looking for that extra layer of security Terenval Wallet also supports popular hardware wallets such as Ledger and Trezor.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -123,7 +123,7 @@ Enkrypt is a web3 wallet built from the ground up to support the multi-chain fut
 - Nibiru Testnet
 - More coming soon!
 
-Looking to add your project? [Contact us!](https://mewwallet.typeform.com/enkrypt-inquiry?typeform-source=www.enkrypt.com)
+Looking to add your project? [Contact support.](https://terenval.com/support/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -222,10 +222,10 @@ Distributed under the MIT License. See `LICENSE.md` for more information.
 
 ## Contact
 
-Twitter - [@enkrypt](https://twitter.com/enkrypt)
+Support - [https://terenval.com/support/](https://terenval.com/support/)
 
-Email - info@enkrypt.com
+Email - support@terenval.com
 
-Homepage - [https://www.enkrypt.com/](https://www.enkrypt.com/)
+Homepage - [https://terenval.com/](https://terenval.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>

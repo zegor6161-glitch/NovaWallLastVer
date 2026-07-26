@@ -1,6 +1,6 @@
 # THIRD_PARTY_ENDPOINTS (Reviewer Disclosure)
 
-This document summarizes external domains/service families used by Nova Wallet.
+This document summarizes external domains/service families used by Terenval Wallet.
 It is reviewer-facing and focused on purpose, data scope, and review-build behavior.
 
 ## Notes for reviewers
@@ -59,7 +59,7 @@ It is reviewer-facing and focused on purpose, data scope, and review-build behav
 | Domain / service | Purpose | Data involved | Required or optional | Used in normal build? | Disabled in review build? | Reviewer note |
 |---|---|---|---|---|---|---|
 | `backupstore.enkrypt.com` | Remote encrypted backup list/get/create/delete/restore | Public key path params, signature query param, encrypted backup payload blob (account metadata encrypted client-side) | Optional, non-core | Yes (if user enables/uses backup) | **Yes** (`VITE_CWS_REVIEW_BUILD=true`) | Review build disables remote backup network flows. |
-| Support/help links (`help.myetherwallet.com`, support mail links) | User support documentation/navigation | Standard link navigation only | Optional | Yes | No | Informational/support resources, not wallet transaction backends. |
+| Terenval support links (`terenval.com/support/`, support mail links) | User support documentation/navigation | Standard link navigation only | Optional | Yes | No | Informational/support resources, not wallet transaction backends. |
 
 ## 8) Third-party hardware wallet integrations
 

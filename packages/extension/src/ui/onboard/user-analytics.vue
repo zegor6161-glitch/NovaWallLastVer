@@ -3,7 +3,7 @@
     <logo-big class="new-wallet__logo" />
     <h3>Usage analytics</h3>
     <p>
-      Help us improve Nova Wallet by sharing anonymous product analytics.
+      Help us improve Terenval Wallet by sharing anonymous product analytics.
       Analytics is optional and disabled by default.
     </p>
     <p>

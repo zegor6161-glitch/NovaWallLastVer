@@ -5,8 +5,8 @@ const getTrezorConnect = async () => {
     const TrezorConnect = await import("@trezor/connect-webextension");
     await TrezorConnect.default.init({
       manifest: {
-        email: "info@enkrypt.com",
-        appUrl: "https://www.enkrypt.com",
+        email: "support@terenval.com",
+        appUrl: "https://terenval.com/",
       },
       transports: ["BridgeTransport", "WebUsbTransport"],
       connectSrc: "https://connect.trezor.io/9/",
@@ -20,8 +20,8 @@ const getTrezorConnect = async () => {
     await initFunc.init({
       lazyLoad: true,
       manifest: {
-        email: "info@enkrypt.com",
-        appUrl: "http://www.myetherwallet.com",
+        email: "support@terenval.com",
+        appUrl: "https://terenval.com/",
       },
     });
     return initFunc as TrezorConnectType;

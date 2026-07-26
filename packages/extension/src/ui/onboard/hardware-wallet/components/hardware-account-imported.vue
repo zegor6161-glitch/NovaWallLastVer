@@ -2,7 +2,7 @@
   <div class="hardware-account-imported">
     <import-done-animation />
     <h3>Accounts imported</h3>
-    <p>Now you can close this tab and open Nova Wallet.</p>
+    <p>Now you can close this tab and open Terenval Wallet.</p>
   </div>
 </template>
 <script setup lang="ts">

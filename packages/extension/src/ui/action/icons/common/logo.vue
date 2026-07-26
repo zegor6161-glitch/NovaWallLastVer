@@ -16,7 +16,7 @@
       font-weight="700"
       font-family="Roboto, sans-serif"
     >
-      Nova Wallet
+      Terenval Wallet
     </text>
   </svg>
 </template>

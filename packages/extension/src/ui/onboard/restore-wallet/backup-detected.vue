@@ -51,11 +51,11 @@
     />
 
     <div class="backup-detected__details">
-      Nova Wallet creates backups of generated user accounts, derivation paths, and
+      Terenval Wallet creates backups of generated user accounts, derivation paths, and
       account names across all networks to make it easier to restore your
       wallet.
       <a
-        href="https://help.myetherwallet.com/en/articles/6437190-enkrypt-add-and-import-accounts-and-connect-a-hardware-wallet#h_62bd285c76"
+        href="https://terenval.com/support/"
         target="_blank"
         >Learn more</a
       >

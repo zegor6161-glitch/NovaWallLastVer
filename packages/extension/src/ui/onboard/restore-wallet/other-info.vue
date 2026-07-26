@@ -6,21 +6,16 @@
     >
       <h3>Your safety and security is our #1 priority</h3>
       <p>
-        We don't support keystore file and private key imports in Nova Wallet, as
+        We don't support keystore file and private key imports in Terenval Wallet, as
         they are highly unsafe.
       </p>
       <p>
-        (Note that keystore file and private key are still available methods of
-        access on MyEtherWallet.com, but are not recommended unless using MEW
-        offline)
-      </p>
-      <p>
         For maximum security its best to create a new wallet directly in
-        Nova Wallet, same as if you just got a new hardware wallet. That way you can
+        Terenval Wallet, same as if you just got a new hardware wallet. That way you can
         be sure your keys never leave your device.
       </p>
       <p>
-        If you want to access funds in one of your existing wallets via Nova Wallet,
+        If you want to access funds in one of your existing wallets via Terenval Wallet,
         the most secure way is to create a new wallet and transfer your ETH and
         Tokens to the new wallet.
       </p>

@@ -3,12 +3,12 @@
     <logo-big class="new-wallet__logo" />
     <h3>Multiple Chains.<br />One Wallet.</h3>
     <p>
-      Nova Wallet is a wallet that gives you easy access to all things crypto and
+      Terenval Wallet is a wallet that gives you easy access to all things crypto and
       web3.
     </p>
     <p>
       Switch accounts and chains with 1 click.<br />
-      Nova Wallet currently supports the Ethereum and Polkadot ecosystems with more
+      Terenval Wallet currently supports the Ethereum and Polkadot ecosystems with more
       chains on the way!
     </p>
 

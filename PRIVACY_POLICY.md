@@ -1,12 +1,12 @@
-# Nova Wallet Extension Privacy Policy
+# Terenval Wallet Extension Privacy Policy
 
 **Last updated:** April 1, 2026
 
-This Privacy Policy describes how the Nova Wallet browser extension processes data when you use wallet features in the extension.
+This Privacy Policy describes how the Terenval Wallet browser extension processes data when you use wallet features in the extension.
 
 ## 1) Scope
 
-This policy applies to the Nova Wallet browser extension package distributed through the Chrome Web Store.
+This policy applies to the Terenval Wallet browser extension package distributed through the Chrome Web Store.
 
 ## 2) Data processed locally on your device
 
@@ -70,8 +70,8 @@ Where available in extension settings, you can change privacy-related controls (
 
 For privacy questions or requests, contact:
 
-- **Privacy contact email:** `TODO: set production privacy email before Chrome Web Store submission`
-- **Support URL:** `TODO: set production support URL before Chrome Web Store submission`
+- **Privacy contact email:** `support@terenval.com`
+- **Support URL:** `https://terenval.com/support/`
 
 ## 11) Changes to this policy
 

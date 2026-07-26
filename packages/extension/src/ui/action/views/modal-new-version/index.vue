@@ -3,7 +3,7 @@
     <div class="rate__overlay" @click="close" />
     <div class="rate__wrap">
       <div class="rate__header">
-        <h2>New Nova Wallet version available</h2>
+        <h2>New Terenval Wallet version available</h2>
         <a class="rate__close" @click="close">
           <close-icon />
         </a>
@@ -40,7 +40,7 @@ interface IProps {
 defineProps<IProps>();
 
 const update = async () => {
-  openLink('https://www.enkrypt.com');
+  openLink('https://terenval.com/');
 };
 </script>
 

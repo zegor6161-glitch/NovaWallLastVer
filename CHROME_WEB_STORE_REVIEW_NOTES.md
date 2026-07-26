@@ -1,8 +1,8 @@
-# Chrome Web Store Reviewer Notes — Nova Wallet
+# Chrome Web Store Reviewer Notes — Terenval Wallet
 
 ## 1) What this extension is
 
-Nova Wallet is a **browser extension cryptocurrency wallet**. It provides account management, signing, and transaction workflows for supported networks (including Bitcoin, Ethereum/EVM, and Solana), and injects wallet providers for dApp connectivity.
+Terenval Wallet is a **browser extension cryptocurrency wallet**. It provides account management, signing, and transaction workflows for supported networks (including Bitcoin, Ethereum/EVM, and Solana), and injects wallet providers for dApp connectivity.
 
 ## 2) Single purpose
 
@@ -38,7 +38,7 @@ Additional targeted matching is used for Trezor connect integration paths.
 
 Browser wallets use an established provider pattern: dApps expect a wallet provider object to be available on the page context (`window`) when the user opens a dApp.
 
-For that reason, Nova Wallet keeps provider injection available on user-visited sites and uses MAIN world/page context so dApp discovery and interoperability patterns (including standard wallet-provider discovery flows) work as expected.
+For that reason, Terenval Wallet keeps provider injection available on user-visited sites and uses MAIN world/page context so dApp discovery and interoperability patterns (including standard wallet-provider discovery flows) work as expected.
 
 In practical terms, this access is used to:
 

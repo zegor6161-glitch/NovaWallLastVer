@@ -3,27 +3,10 @@
     <logo-big class="wallet-ready__logo" />
     <h3>Your wallet is ready</h3>
 
-    <div class="wallet-ready__social">
-      <h4>Follow us</h4>
-      <div class="wallet-ready__social-wrap">
-        <a href="https://github.com/myetherwallet" target="_blank">
-          <github-icon />
-        </a>
-        <a href="https://www.instagram.com/myetherwallet/" target="_blank">
-          <instagram-icon />
-        </a>
-        <a href="https://www.reddit.com/r/MyEtherWallet/" target="_blank">
-          <reddit-icon />
-        </a>
-        <a href="https://twitter.com/myetherwallet" target="_blank">
-          <twitter-icon />
-        </a>
-      </div>
-    </div>
     <base-button title="Finish" :click="finishAction" />
     <h4 style="margin-left: 80px; margin-top: 10px">
       <a
-        href="https://blog.enkrypt.com/getting-started-with-enkrypt-wallet/"
+        href="https://terenval.com/support/"
         target="_blank"
         >How to get started 👉</a
       >
@@ -33,10 +16,6 @@
 <script setup lang="ts">
 import BaseButton from '@action/components/base-button/index.vue';
 import LogoBig from '@action/icons/common/logo-big.vue';
-import GithubIcon from '@action/icons/social/github-icon.vue';
-import InstagramIcon from '@action/icons/social/instagram-icon.vue';
-import RedditIcon from '@action/icons/social/reddit-icon.vue';
-import TwitterIcon from '@action/icons/social/twitter-icon.vue';
 import { useRestoreStore } from '../restore-wallet/store';
 import { useOnboardStore } from './store';
 import { onMounted } from 'vue';
