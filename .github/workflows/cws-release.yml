@@ -1,0 +1,43 @@
+name: CWS release gate
+
+on:
+  pull_request:
+    paths:
+      - 'packages/**'
+      - '.github/workflows/cws-release.yml'
+      - 'yarn.lock'
+      - 'package.json'
+
+permissions:
+  contents: read
+
+jobs:
+  cws-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: yarn
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Typecheck, build, scan and package
+        run: node packages/extension/configs/cws/release.mjs
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+
+      - name: Upload exact CWS ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: terenval-wallet-cws
+          path: packages/extension/release/terenval-wallet-cws.zip
+          if-no-files-found: error
+          retention-days: 14
