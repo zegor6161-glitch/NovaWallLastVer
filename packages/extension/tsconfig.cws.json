@@ -3,6 +3,13 @@
   "compilerOptions": {
     "noEmit": true,
     "types": ["node", "chrome"],
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "noUncheckedIndexedAccess": false,
+    "useUnknownInCatchVariables": false,
+    "skipLibCheck": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.cws.tsbuildinfo"
   },
   "exclude": [
