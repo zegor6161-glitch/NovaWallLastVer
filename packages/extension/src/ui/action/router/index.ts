@@ -6,8 +6,6 @@ import NetworkDApps from '@action/views/network-dapps/index.vue';
 import NetworkNFTs from '@action/views/network-nfts/index.vue';
 import LockScreen from '@action/views/lock-screen/index.vue';
 import Intro from '@action/views/intro/index.vue';
-import Swap from '@action/views/swap/index.vue';
-import SwapBestOffer from '@action/views/swap/views/swap-best-offer/index.vue';
 import VerifyTransaction from '@action/views/verify-transaction/index.vue';
 import SendTransaction from '@action/views/send-transaction/index.vue';
 
@@ -67,25 +65,6 @@ const routes = {
       view: VerifyTransaction,
     },
     name: 'verify-transaction',
-  },
-  swap: {
-    path: '/swap/:id?',
-    components: {
-      view: Swap,
-    },
-    name: 'swap',
-  },
-  swapBestOffer: {
-    path: '/swap-best-offer/:id?',
-    components: {
-      view: SwapBestOffer,
-    },
-    name: 'swap-best-offer',
-  },
-  swapBestOfferHW: {
-    path: '/swap-best-offer-hw/:id?',
-    component: SwapBestOffer,
-    name: 'swap-best-offer-hw',
   },
   addNetwork: {
     path: '/add-network',
