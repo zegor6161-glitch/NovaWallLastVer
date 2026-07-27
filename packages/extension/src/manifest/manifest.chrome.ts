@@ -8,6 +8,7 @@ const chromeManifest = {
       '16': 'assets/img/icons/icon16.png',
       '32': 'assets/img/icons/icon32.png',
       '64': 'assets/img/icons/icon64.png',
+      '128': 'assets/img/icons/icon128.png',
       '192': 'assets/img/icons/icon192.png',
     },
     default_title: 'Terenval Wallet',
