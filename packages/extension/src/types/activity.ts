@@ -1,12 +1,5 @@
 import { NetworkNames } from '@enkryptcom/types';
 import { BaseTokenOptions } from './base-token';
-import {
-  TokenType,
-  TokenTypeTo,
-  StatusOptionsResponse,
-} from '@enkryptcom/swap';
-import { ICommandResult } from '@kadena/client';
-import { OperationStatus } from '@massalabs/massa-web3';
 
 interface BTCIns {
   address: string;
@@ -15,13 +8,6 @@ interface BTCIns {
 
 interface BTCOuts extends BTCIns {
   pkscript: string;
-}
-
-interface SOLRawInfo {
-  blockNumber: number;
-  transactionHash: string;
-  timestamp: number | null | undefined;
-  status: boolean;
 }
 
 interface BTCRawInfo {
@@ -50,50 +36,6 @@ interface EthereumRawInfo {
   timestamp: number | undefined;
 }
 
-interface SubscanExtrinsicInfo {
-  success: boolean;
-  finalized: boolean;
-  pending: boolean;
-  extrinsic_hash: string;
-  call_module: string;
-  block_timestamp: number;
-  block_num: number;
-}
-
-interface SubstrateRawInfo {
-  from: string;
-  to: string;
-  success: boolean;
-  hash: string;
-  block_num: number;
-  block_timestamp: number;
-  module: string;
-  amount: string;
-  fee: string;
-  nonce: number;
-  asset_symbol: string;
-  asset_type: string;
-}
-
-type KadenaRawInfo = ICommandResult;
-
-interface KadenaDBInfo {
-  amount: string;
-  blockHash: string;
-  blockTime: string;
-  chain: number;
-  crossChainAccount: string | null;
-  crossChainId: number | null;
-  fromAccount: string;
-  height: number;
-  idx: number;
-  requestKey: string;
-  toAccount: string;
-  token: string;
-}
-
-type MassaRawInfo = OperationStatus;
-
 enum ActivityStatus {
   pending = 'pending',
   success = 'success',
@@ -103,19 +45,13 @@ enum ActivityStatus {
 
 enum ActivityType {
   transaction = 'transaction',
-  swap = 'swap',
 }
-interface SwapRawInfo {
-  fromToken: TokenType;
-  toToken: TokenTypeTo;
-  status: StatusOptionsResponse;
-}
+
 interface Activity {
   network: NetworkNames;
   from: string;
   to: string;
   chainId?: string;
-  crossChainId?: number;
   value: string;
   timestamp: number;
   nonce?: string;
@@ -124,28 +60,13 @@ interface Activity {
   token: BaseTokenOptions;
   status: ActivityStatus;
   type: ActivityType;
-  rawInfo?:
-    | EthereumRawInfo
-    | SubstrateRawInfo
-    | SubscanExtrinsicInfo
-    | BTCRawInfo
-    | SwapRawInfo
-    | KadenaRawInfo
-    | SOLRawInfo
-    | MassaRawInfo;
+  rawInfo?: EthereumRawInfo | BTCRawInfo;
 }
 
 export {
   EthereumRawInfo,
-  SubstrateRawInfo,
   Activity,
   ActivityStatus,
   ActivityType,
-  SubscanExtrinsicInfo,
   BTCRawInfo,
-  SwapRawInfo,
-  KadenaRawInfo,
-  KadenaDBInfo,
-  SOLRawInfo,
-  MassaRawInfo,
 };
