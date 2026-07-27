@@ -34,7 +34,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          yarn install --mode=skip-builds 2>&1 | tee yarn-install.log
+          yarn install --mode=skip-build 2>&1 | tee yarn-install.log
 
       - name: Upload Yarn install diagnostics
         if: always()
