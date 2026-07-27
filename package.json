@@ -1,5 +1,5 @@
 {
-  "name": "enkrypt",
+  "name": "terenval-wallet",
   "packageManager": "yarn@4.5.1",
   "version": "0.0.3",
   "private": true,
@@ -39,7 +39,7 @@
     "husky": "^9.1.7",
     "node-notifier": "^10.0.1",
     "nodemon": "^3.1.11",
-    "ultra-runner": "^3.10.5",
+    "ultra-runner": "^10.5.1",
     "vite-plugin-node-polyfills": "0.25.0"
   },
   "resolutions": {

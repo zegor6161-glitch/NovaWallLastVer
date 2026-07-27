@@ -1,7 +1,7 @@
 <br />
 <div align="center">
-  <a href="https://github.com/enkryptcom/enKrypt">
-    <img src="enkrypt.png" alt="Logo">
+  <a href="https://terenval.com/">
+    <img src="terenval-wallet.svg" alt="Terenval Wallet logo">
   </a>
 
   <h3 align="center">Terenval Wallet</h3>
@@ -9,15 +9,15 @@
   <p align="center">
     Everything in the blockchain made easy
     <br />
-    <a href="https://chrome.google.com/webstore/detail/enkrypt-ethereum-and-polk/kkpllkodjeloidieedojogacfhpaihoh">
-      <strong>Download for Chrome/Brave »</strong>
+    <a href="https://terenval.com/">
+      <strong>Official website »</strong>
     </a>
     <br />
     <br />
     ·
-    <a href="https://github.com/enkryptcom/enKrypt/issues">Report Bug</a>
+    <a href="https://github.com/zegor6161-glitch/NovaWallLastVer/issues">Report Bug</a>
     ·
-    <a href="https://github.com/enkryptcom/enKrypt/issues">Request Feature</a>
+    <a href="https://github.com/zegor6161-glitch/NovaWallLastVer/issues">Request Feature</a>
   </p>
 </div>
 
@@ -25,7 +25,7 @@
 
 ## About Terenval Wallet
 
-Terenval Wallet is a web3 wallet built from the ground up to support the multi-chain future. Send, receive, swap, manage your tokens and NFTs, and interact with dapps on all of your favorite chains with just a few clicks. With only one seed phrase for all of your accounts Terenval Wallet makes it easy to manage your assets and stay secure. If you're looking for that extra layer of security Terenval Wallet also supports popular hardware wallets such as Ledger and Trezor.
+Terenval Wallet is a web3 wallet built from the ground up to support the multi-chain future. Send, receive, swap, manage your tokens and NFTs, and interact with dapps on all of your favorite chains with just a few clicks. With only one seed phrase for all of your accounts, Terenval Wallet makes it easy to manage your assets and stay secure. If you're looking for an extra layer of security, Terenval Wallet also supports popular hardware wallets such as Ledger and Trezor.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -138,7 +138,7 @@ Looking to add your project? [Contact support.](https://terenval.com/support/)
 
 ## Getting Started
 
-To get started make sure you have `nodejs` and `nvm` installed on your system
+To get started, make sure you have `nodejs` and `nvm` installed on your system.
 
 ### Prerequisites
 
@@ -153,7 +153,7 @@ To get started make sure you have `nodejs` and `nvm` installed on your system
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/enkryptcom/enKrypt.git
+   git clone https://github.com/zegor6161-glitch/NovaWallLastVer.git
    ```
 2. Install NPM packages
    ```sh
@@ -181,15 +181,15 @@ To get started make sure you have `nodejs` and `nvm` installed on your system
    Since Firefox verification team looking for identical builds, you have to build it using docker
 
    ```sh
-   docker build -t enkrypt-build-container .
-   docker run --rm -v `pwd`:/home:rw --user "$(id -u):$(id -g)" enkrypt-build-container /bin/bash -c "yarn install --silent"
-   docker run --rm --user "$(id -u):$(id -g)" -v `pwd`:/home:rw enkrypt-build-container /bin/bash -c "cd packages/extension && yarn build:all"
-   docker run --rm --user "$(id -u):$(id -g)" -v `pwd`:/home:rw enkrypt-build-container /bin/bash -c "cd packages/extension && yarn build:firefox && yarn zip"
+   docker build -t terenval-wallet-build .
+   docker run --rm -v `pwd`:/home:rw --user "$(id -u):$(id -g)" terenval-wallet-build /bin/bash -c "yarn install --silent"
+   docker run --rm --user "$(id -u):$(id -g)" -v `pwd`:/home:rw terenval-wallet-build /bin/bash -c "cd packages/extension && yarn build:all"
+   docker run --rm --user "$(id -u):$(id -g)" -v `pwd`:/home:rw terenval-wallet-build /bin/bash -c "cd packages/extension && yarn build:firefox && yarn zip"
    ```
 
 7. Add to your browser
-   - [Chrome/Brave/Opera](https://developer.chrome.com/docs/extensions/mv2/getstarted/#manifest)
-   - [Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#installing)
+   - [Chrome/Brave/Opera](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world)
+   - [Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
