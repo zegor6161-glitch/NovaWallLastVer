@@ -12,9 +12,9 @@ const zipPath = resolve(releaseDir, 'terenval-wallet-cws.zip');
 const run = (command, args, options = {}) => {
   console.log(`> ${command} ${args.join(' ')}`);
   execFileSync(command, args, {
-    cwd: extensionRoot,
+    cwd: options.cwd ?? extensionRoot,
     stdio: 'inherit',
-    env: { ...process.env, ...options.env },
+    env: { ...process.env, ...(options.env ?? {}) },
   });
 };
 
@@ -32,6 +32,6 @@ run('yarn', ['exec', 'vite', 'build'], {
   },
 });
 run('node', ['configs/cws/scan-artifact.mjs']);
-run('zip', ['-X', '-q', '-r', zipPath, '.'], { env: process.env, cwd: dist });
+run('zip', ['-X', '-q', '-r', zipPath, '.'], { cwd: dist });
 
 console.log(`CWS release created: ${zipPath}`);
