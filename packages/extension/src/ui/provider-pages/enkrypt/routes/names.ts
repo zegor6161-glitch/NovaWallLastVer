@@ -9,9 +9,4 @@ export default {
     name: 'loading',
     component: {},
   },
-  swapVerifyHW: {
-    path: 'swap-verify-hw',
-    name: 'swap-verify-hw',
-    component: {},
-  },
 };
