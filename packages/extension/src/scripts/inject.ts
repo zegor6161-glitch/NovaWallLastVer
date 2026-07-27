@@ -5,11 +5,7 @@ import {
 } from '@/libs/messenger/bridge-window';
 import { ProviderName, ProviderType } from '@/types/provider';
 import EthereumProvider from '@/providers/ethereum/inject';
-import PolkadotProvider from '@/providers/polkadot/inject';
 import BitcoinProvider from '@/providers/bitcoin/inject';
-import KadenaProvider from '@/providers/kadena/inject';
-import SolanaProvider from '@/providers/solana/inject';
-
 import { InternalMethods } from '@/types/messenger';
 
 setWindowNamespace();
@@ -17,30 +13,16 @@ setWindowNamespace();
   providers: {},
   settings: {},
 };
+
 const loadInjectedProviders = () => {
   EthereumProvider(window, {
     name: ProviderName.ethereum,
     type: ProviderType.evm,
     sendMessageHandler: providerSendMessage,
   });
-  PolkadotProvider(window, {
-    name: ProviderName.polkadot,
-    type: ProviderType.substrate,
-    sendMessageHandler: providerSendMessage,
-  });
   BitcoinProvider(window, {
     name: ProviderName.bitcoin,
     type: ProviderType.bitcoin,
-    sendMessageHandler: providerSendMessage,
-  });
-  KadenaProvider(window, {
-    name: ProviderName.kadena,
-    type: ProviderType.kadena,
-    sendMessageHandler: providerSendMessage,
-  });
-  SolanaProvider(window, {
-    name: ProviderName.solana,
-    type: ProviderType.solana,
     sendMessageHandler: providerSendMessage,
   });
 };
@@ -62,4 +44,3 @@ window.addEventListener('beforeunload', () => {
     JSON.stringify({ method: InternalMethods.newWindowUnload }),
   );
 });
-console.info('Terenval Wallet: Hello from IN');
