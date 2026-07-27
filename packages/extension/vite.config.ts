@@ -124,6 +124,30 @@ export default defineConfig({
   resolve: {
     alias: [
       {
+        find: '@/providers/solana/libs/accounts-state',
+        replacement: fileURLToPath(
+          new URL('./src/config/disabled-account-state.ts', import.meta.url),
+        ),
+      },
+      {
+        find: '@/providers/polkadot/libs/accounts-state',
+        replacement: fileURLToPath(
+          new URL('./src/config/disabled-account-state.ts', import.meta.url),
+        ),
+      },
+      {
+        find: '@/providers/kadena/libs/accounts-state',
+        replacement: fileURLToPath(
+          new URL('./src/config/disabled-account-state.ts', import.meta.url),
+        ),
+      },
+      {
+        find: '@/providers/kadena/types',
+        replacement: fileURLToPath(
+          new URL('./src/config/disabled-kadena-types.ts', import.meta.url),
+        ),
+      },
+      {
         find: '@',
         replacement: fileURLToPath(new URL('./src', import.meta.url)),
       },
