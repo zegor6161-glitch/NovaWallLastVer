@@ -1,0 +1,9 @@
+<svg width="1400" height="560" viewBox="0 0 1400 560" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Terenval Wallet</title>
+  <desc id="desc">Terenval Wallet purple T logo and wordmark</desc>
+  <rect width="1400" height="560" rx="48" fill="#F8F7FF"/>
+  <rect x="120" y="120" width="320" height="320" rx="88" fill="#684CFF"/>
+  <path d="M205 220H355M280 220V360" stroke="white" stroke-width="44" stroke-linecap="round"/>
+  <text x="520" y="315" fill="#1F1D2B" font-family="Arial, Helvetica, sans-serif" font-size="108" font-weight="700">Terenval Wallet</text>
+  <text x="526" y="375" fill="#5F5B70" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="400">Everything in the blockchain made easy</text>
+</svg>
