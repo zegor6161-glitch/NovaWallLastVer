@@ -121,6 +121,10 @@ export default defineConfig({
               find: '@enkryptcom/hw-wallets',
               replacement: fileURLToPath(new URL('./src/config/cws-hardware-wallets-stub.ts', import.meta.url)),
             },
+            {
+              find: '@enkryptcom/swap',
+              replacement: fileURLToPath(new URL('./src/config/cws-swap-stub.ts', import.meta.url)),
+            },
           ]
         : []),
       {
