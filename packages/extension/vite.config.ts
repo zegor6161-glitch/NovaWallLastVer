@@ -9,6 +9,7 @@ import operaManifest from './src/manifest/manifest.opera';
 import assetsRewritePlugin from './configs/vite/assets-rewrite';
 import transformManifest from './configs/vite/transform-manifest';
 import transformCSInject from './configs/vite/transform-cs-inject';
+import releaseScopePlugin from './configs/cws/release-scope-plugin';
 import { version } from './package.json';
 import wasm from 'vite-plugin-wasm';
 
@@ -65,6 +66,7 @@ export default defineConfig({
     assetsRewritePlugin,
     transformCSInject(),
     transformManifest(),
+    ...(IS_CWS_BUILD ? [releaseScopePlugin()] : []),
     crx({
       manifest: getManifest(),
       browser: BROWSER === 'firefox' ? 'firefox' : 'chrome',
@@ -112,6 +114,10 @@ export default defineConfig({
             {
               find: 'lottie-web',
               replacement: fileURLToPath(new URL('./src/config/cws-lottie-stub.ts', import.meta.url)),
+            },
+            {
+              find: '@enkryptcom/hw-wallets',
+              replacement: fileURLToPath(new URL('./src/config/cws-hardware-wallets-stub.ts', import.meta.url)),
             },
           ]
         : []),
