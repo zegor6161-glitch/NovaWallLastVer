@@ -46,9 +46,21 @@ jobs:
           retention-days: 3
 
       - name: Typecheck, build, scan and package
-        run: node packages/extension/configs/cws/release.mjs
+        shell: bash
+        run: |
+          set -o pipefail
+          node packages/extension/configs/cws/release.mjs 2>&1 | tee cws-release.log
         env:
           NODE_OPTIONS: --max-old-space-size=8192
+
+      - name: Upload CWS release diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cws-release-log
+          path: cws-release.log
+          if-no-files-found: warn
+          retention-days: 3
 
       - name: Upload exact CWS ZIP
         uses: actions/upload-artifact@v4
