@@ -1,7 +1,6 @@
 import { fileURLToPath, URL } from 'node:url';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
-import { visualizer } from 'rollup-plugin-visualizer';
-import { defineConfig, type PluginOption } from 'vite';
+import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { crx } from '@crxjs/vite-plugin';
 import chromeManifest from './src/manifest/manifest.chrome';
@@ -14,6 +13,8 @@ import { version } from './package.json';
 import wasm from 'vite-plugin-wasm';
 
 const BROWSER = process.env.BROWSER;
+const IS_CWS_BUILD = process.env.CWS_RELEASE === 'true';
+
 const firefoxChunking = (id: string) => {
   if (id.includes('node_modules')) {
     const chunkName = id.match(/node_modules\/(.+?)\//);
@@ -33,15 +34,10 @@ const getManifest = () => {
 };
 
 export default defineConfig({
-  legacy: {
-    skipWebSocketTokenCheck: true,
-  },
   server: {
     port: 5173,
     strictPort: true,
-    hmr: {
-      port: 5173,
-    },
+    hmr: { port: 5173 },
   },
   define: {
     __PREFILL_PASSWORD__:
@@ -57,23 +53,12 @@ export default defineConfig({
     __BUILD_TIME__:
       BROWSER === 'firefox'
         ? JSON.stringify('FF-build')
-        : JSON.stringify(new Date().toLocaleString().replace(/\D/g, '')),
+        : JSON.stringify(new Date().toISOString()),
   },
   plugins: [
     wasm(),
-    visualizer() as PluginOption,
     nodePolyfills({
-      include: [
-        'crypto',
-        'buffer',
-        'util',
-        'stream',
-        'url',
-        'http',
-        'https',
-        'path',
-        'os',
-      ],
+      include: ['crypto', 'buffer', 'util', 'stream', 'url', 'http', 'https', 'path', 'os'],
       protocolImports: true,
     }),
     vue(),
@@ -83,35 +68,30 @@ export default defineConfig({
     crx({
       manifest: getManifest(),
       browser: BROWSER === 'firefox' ? 'firefox' : 'chrome',
-      contentScripts: {
-        injectCss: false,
-      },
+      contentScripts: { injectCss: false },
     }),
   ],
-  worker: {
-    plugins: () => [wasm()],
-  },
+  worker: { plugins: () => [wasm()] },
   css: {
     preprocessorOptions: {
-      less: {
-        math: 'always',
-        javascriptEnabled: true,
-      },
+      less: { math: 'always', javascriptEnabled: true },
     },
   },
   build: {
     commonjsOptions: { transformMixedEsModules: true },
     emptyOutDir: true,
-    sourcemap: true,
-    minify: false,
+    sourcemap: IS_CWS_BUILD ? false : true,
+    minify: IS_CWS_BUILD ? 'terser' : false,
+    terserOptions: IS_CWS_BUILD
+      ? {
+          compress: { passes: 2, drop_debugger: true },
+          format: { comments: false },
+          mangle: true,
+        }
+      : undefined,
     rollupOptions: {
-      plugins: [],
       external: [],
-      input: {
-        action: 'action.html',
-        onboard: 'onboard.html',
-        index: 'index.html',
-      },
+      input: { action: 'action.html', onboard: 'onboard.html', index: 'index.html' },
       output: {
         manualChunks: BROWSER === 'firefox' ? firefoxChunking : undefined,
       },
@@ -123,57 +103,45 @@ export default defineConfig({
   },
   resolve: {
     alias: [
+      ...(IS_CWS_BUILD
+        ? [
+            {
+              find: 'vue3-lottie',
+              replacement: fileURLToPath(new URL('./src/config/cws-lottie-stub.ts', import.meta.url)),
+            },
+            {
+              find: 'lottie-web',
+              replacement: fileURLToPath(new URL('./src/config/cws-lottie-stub.ts', import.meta.url)),
+            },
+          ]
+        : []),
       {
         find: '@/providers/solana/libs/accounts-state',
-        replacement: fileURLToPath(
-          new URL('./src/config/disabled-account-state.ts', import.meta.url),
-        ),
+        replacement: fileURLToPath(new URL('./src/config/disabled-account-state.ts', import.meta.url)),
       },
       {
         find: '@/providers/polkadot/libs/accounts-state',
-        replacement: fileURLToPath(
-          new URL('./src/config/disabled-account-state.ts', import.meta.url),
-        ),
+        replacement: fileURLToPath(new URL('./src/config/disabled-account-state.ts', import.meta.url)),
       },
       {
         find: '@/providers/kadena/libs/accounts-state',
-        replacement: fileURLToPath(
-          new URL('./src/config/disabled-account-state.ts', import.meta.url),
-        ),
+        replacement: fileURLToPath(new URL('./src/config/disabled-account-state.ts', import.meta.url)),
       },
       {
         find: '@/providers/kadena/types',
-        replacement: fileURLToPath(
-          new URL('./src/config/disabled-kadena-types.ts', import.meta.url),
-        ),
+        replacement: fileURLToPath(new URL('./src/config/disabled-kadena-types.ts', import.meta.url)),
       },
-      {
-        find: '@',
-        replacement: fileURLToPath(new URL('./src', import.meta.url)),
-      },
-      {
-        find: '@action',
-        replacement: fileURLToPath(new URL('./src/ui/action', import.meta.url)),
-      },
+      { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
+      { find: '@action', replacement: fileURLToPath(new URL('./src/ui/action', import.meta.url)) },
       { find: 'fs', replacement: './configs/vite/empty.js' },
       { find: 'tiny-secp256k1', replacement: '@bitcoinerlab/secp256k1' },
       {
         find: /^@noble\/curves\/(.*)\.js$/,
-        replacement: fileURLToPath(
-          new URL(
-            '../../crypto-libs-snapshot/@noble/curves/esm/$1.js',
-            import.meta.url,
-          ),
-        ),
+        replacement: fileURLToPath(new URL('../../crypto-libs-snapshot/@noble/curves/esm/$1.js', import.meta.url)),
       },
       {
         find: /^@noble\/curves\/(.*)$/,
-        replacement: fileURLToPath(
-          new URL(
-            '../../crypto-libs-snapshot/@noble/curves/esm/$1.js',
-            import.meta.url,
-          ),
-        ),
+        replacement: fileURLToPath(new URL('../../crypto-libs-snapshot/@noble/curves/esm/$1.js', import.meta.url)),
       },
     ],
   },
