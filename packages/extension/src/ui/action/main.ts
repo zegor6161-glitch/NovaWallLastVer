@@ -1,8 +1,7 @@
 import { createApp } from 'vue';
-import App from './App.vue';
+import App from './App.cws.vue';
 import router from './router';
 import * as filters from './utils/filters';
-import Vue3Lottie from 'vue3-lottie';
 import { createPinia } from 'pinia';
 
 global.WeakMap = WeakMap;
@@ -14,7 +13,6 @@ if (import.meta.env.DEV) {
 const app = createApp(App);
 const pinia = createPinia();
 
-app.use(router).use(Vue3Lottie, { name: 'vue3lottie' }).use(pinia);
-
+app.use(router).use(pinia);
 app.config.globalProperties.$filters = filters;
 app.mount('#app');
