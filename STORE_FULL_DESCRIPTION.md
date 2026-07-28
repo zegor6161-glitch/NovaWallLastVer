@@ -1,37 +1,39 @@
-# Terenval Wallet
+# Terenval Wallet — Chrome Web Store Description
 
-Terenval Wallet is a browser extension cryptocurrency wallet for **Bitcoin, Ethereum/EVM, and Solana**.
+Terenval Wallet is a non-custodial browser wallet for Ethereum, selected Layer 2 networks, custom EVM networks, and Bitcoin.
 
-## Single purpose
+## Manage your wallet in the browser
 
-Terenval Wallet has one core purpose: **self-custody wallet functionality in the browser**.
+- Create a new wallet or import an existing wallet.
+- View public addresses, balances, assets, and locally saved transaction activity.
+- Send Ethereum/EVM assets and Bitcoin after reviewing transaction details.
+- Add a custom EVM network using an RPC endpoint you choose.
+- Copy public wallet addresses with a user-initiated copy action.
 
-## Core wallet actions
+## Connect to compatible dApps
 
-- Create a new wallet or import an existing wallet
-- View wallet addresses, balances, and supported asset data
-- Connect to compatible dApps through injected wallet providers
-- Review and approve or reject signature requests
-- Review and approve or reject transaction requests
+Terenval Wallet provides Ethereum-compatible and Bitcoin/Unisat-compatible provider interfaces. A website can request account access, a signature, or a transaction, but nothing is approved automatically. The Extension shows the requesting site and requires the user to approve or reject each sensitive request.
 
-## Permission rationale (plain language)
+## Supported built-in networks
 
-- Broad website matching is used so compatible dApps can detect/connect to the wallet provider on sites the user opens.
-- Storage permissions persist encrypted wallet state and user settings locally.
-- Tabs permission supports wallet-initiated navigation flows (for example onboarding/support/hardware-wallet steps).
-- Clipboard write is used for explicit user copy actions (for example copying a public address).
+- Ethereum
+- Optimism
+- Arbitrum One
+- Base
+- Polygon
+- zkSync Era
+- Linea
+- Scroll
+- Bitcoin
 
-## Data handling summary
+## Non-custodial security model
 
-- **Handled locally:** seed phrase, private keys, wallet password, encrypted wallet state.
-- **Sent for wallet operation:** blockchain RPC requests, balance/state queries, transaction-related requests, and optional user-invoked provider APIs (for example swap/buy paths when used).
-- **Never intentionally sent as plaintext by the extension:** seed phrase, private keys, wallet password.
-- The extension does **not** sell user data.
+Seed phrases, private keys, wallet passwords, and signing operations stay on the user’s device. Terenval Wallet cannot recover lost credentials. Users should keep recovery phrases offline, verify website domains, and review every signature and transaction request.
 
-## Review-build note for moderation
+## Privacy
 
-For Chrome Web Store review builds (`VITE_CWS_REVIEW_BUILD=true`), non-core telemetry and remote backup flows are disabled so review scope remains on core wallet behavior.
+Optional product analytics is disabled until the user explicitly enables it and can be turned off later in Settings. Analytics excludes wallet addresses, transaction hashes, exact amounts, website URLs, seed phrases, private keys, and passwords.
 
-## Security reminder
+The Chrome Web Store release does not include swaps, hardware-wallet integrations, remote settings backup, Solana, Polkadot, Kadena, Massa, Litecoin, or Dogecoin.
 
-No software wallet can guarantee absolute security. Users should protect their recovery phrase, verify transaction details, and keep browser/device environments secure.
+Support: support@terenval.com
