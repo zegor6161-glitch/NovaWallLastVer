@@ -1,78 +1,110 @@
-# Terenval Wallet Extension Privacy Policy
+# Terenval Wallet Privacy Policy
 
-**Last updated:** April 1, 2026
+**Effective date:** July 28, 2026  
+**Contact:** support@terenval.com
 
-This Privacy Policy describes how the Terenval Wallet browser extension processes data when you use wallet features in the extension.
+This Privacy Policy explains how the Terenval Wallet browser extension (the “Extension”) processes information. Terenval Wallet is a non-custodial wallet for Ethereum, selected Ethereum Layer 2 networks, and Bitcoin.
 
-## 1) Scope
+## 1. Non-custodial design
 
-This policy applies to the Terenval Wallet browser extension package distributed through the Chrome Web Store.
+Your seed phrase, private keys, passwords, PINs, and locally generated signing material remain on your device. They are encrypted in browser extension storage where applicable and are never transmitted to Terenval analytics servers, RPC providers, block explorers, market-data providers, or websites by Terenval Wallet.
 
-## 2) Data processed locally on your device
+Terenval Wallet cannot recover your seed phrase or private keys.
 
-For core wallet operation, the extension stores and processes data in browser extension storage (and related local state), including:
+## 2. Information processed locally
 
-- wallet configuration and encrypted wallet state;
-- public wallet addresses and account labels;
-- selected networks and custom network configuration;
-- token, NFT, activity, and UI preference caches;
-- security/session settings (for example, lock state and related preferences).
+The Extension processes the following information locally to provide wallet functionality:
 
-Sensitive credentials such as **seed phrase (mnemonic), private keys, and wallet password** are handled locally by the extension for wallet creation, restore, unlock, and signing workflows.
+- wallet public addresses and public keys;
+- account names, selected network, selected account, and user preferences;
+- balances, tokens, transaction history, pending transaction state, and locally saved activity;
+- the current website URL, origin/domain, page title, favicon, and browser tab identifier when a website requests wallet access;
+- the association between an approved website/domain and the account selected for that website;
+- analytics consent status and the date/version of the consent decision.
 
-## 3) Sensitive credentials and transmission
+Website URL, domain, title, favicon, and domain-to-account associations are used to display connection requests and remember permissions. They are not included in Terenval product analytics.
 
-The extension is designed so that seed phrases, private keys, and wallet passwords are handled locally and are **not transmitted by the extension to developer-operated servers** as part of normal wallet operation.
+## 3. Blockchain and third-party network requests
 
-The extension does not use hidden collection flows intended to exfiltrate seed phrases, private keys, or wallet passwords.
+To display balances, estimate fees, broadcast transactions, and show market information, the Extension may send public blockchain information to third-party services. Depending on the selected network and action, this may include:
 
-## 4) Network requests required for wallet functionality
+- a public wallet address;
+- a transaction hash or signed raw transaction when broadcasting;
+- contract addresses, token identifiers, chain IDs, and JSON-RPC requests;
+- the user’s IP address as an unavoidable part of an HTTPS connection.
 
-To provide wallet features, the extension may send network requests to third-party infrastructure and partner services selected by wallet logic and user actions, including:
+The reduced Chrome Web Store release includes only:
 
-- blockchain RPC endpoints (read/write operations);
-- balance and transaction state retrieval;
-- token and NFT metadata retrieval;
-- transaction preparation, submission, and status-related requests;
-- optional swap/buy/provider endpoints when those user-facing features are used;
-- optional operational endpoints such as analytics/telemetry when enabled in product settings.
+- Ethereum;
+- Optimism;
+- Arbitrum One;
+- Base;
+- Polygon;
+- zkSync Era;
+- Linea;
+- Scroll;
+- Bitcoin.
 
-These requests can include public account identifiers (such as wallet addresses), network identifiers, and transaction-related public data as required for the requested wallet operation.
+Built-in requests may be sent to the RPC endpoints configured for those networks, block explorers, mempool.space for Bitcoin data and broadcast, and market-data providers used by the Extension. If you add a custom EVM network, requests are sent to the RPC and explorer endpoints you configure.
 
-## 5) Public account identifiers
+These providers process data under their own privacy policies. Terenval Wallet does not control their independent retention practices.
 
-Wallet addresses and other public account identifiers may be processed and transmitted only to the extent necessary to provide wallet features (for example, querying balances, history, NFTs, network state, and broadcasting transactions).
+## 4. Optional product analytics
 
-## 6) Data sales and advertising
+Terenval Wallet offers optional first-party product analytics to understand which networks and wallet functions are useful and to guide product development.
 
-The extension does **not** sell personal data.
+Analytics does not begin until the user makes an explicit choice on the analytics screen. If the user selects “Enable usage analytics,” analytics remains enabled until disabled in **Settings → General → Usage analytics**. If the user declines, no product analytics events are sent.
 
-## 7) Third-party services
+When enabled, analytics may include:
 
-Wallet functionality depends on external blockchain and infrastructure services. Your use of those services may also be subject to their own privacy terms.
+- event type, such as wallet creation/import, unlock, network switch, send start/submission, dApp connection approval, or signature request approval/rejection;
+- network family and chain ID;
+- operation category and screen/source category;
+- asset symbol where applicable;
+- an approximate USD value bucket, such as under $10, $10–$50, $50–$100, $100–$500, $500–$1,000, $1,000–$5,000, or $5,000+;
+- Extension version, analytics consent version, and an event timestamp rounded to the hour.
 
-## 8) Security limitations and user responsibility
+Analytics never includes:
 
-No software wallet can guarantee absolute security. You are responsible for:
+- seed phrase or mnemonic;
+- private keys, passwords, or PINs;
+- wallet addresses or public keys;
+- transaction hashes, signatures, raw transactions, or full transaction payloads;
+- exact transaction amounts or exact balances;
+- website URLs, domains, titles, favicons, browsing history, or search history;
+- email address, name, phone number, or advertising identifier.
 
-- safeguarding your device and browser profile;
-- protecting your seed phrase and password;
-- verifying transaction details before approval;
-- using trusted networks and keeping your software updated.
+Analytics is sent over HTTPS to `analytics.terenval.com`. The event payload contains no persistent analytics user identifier. As with any HTTPS service, the server may temporarily receive the source IP address and basic request metadata in infrastructure access logs.
 
-If your device, browser profile, or backups are compromised, wallet assets may be at risk.
+## 5. Screening in the Chrome Web Store release
 
-## 9) Your choices
+The reduced Chrome Web Store release does not send wallet addresses or IP/geolocation screening requests to MEWAPI or Enkrypt screening services. If a future release introduces address or jurisdiction screening, this policy and the in-product disclosure must be updated before collection begins.
 
-Where available in extension settings, you can change privacy-related controls (for example, analytics preferences).
+## 6. Retention and deletion
 
-## 10) Contact
+- Analytics event records are retained for up to 12 months and then deleted or aggregated into non-identifying statistics.
+- Infrastructure access logs that may contain an IP address are retained for no longer than 7 days, except where a longer period is necessary to investigate abuse, security incidents, or comply with law.
+- Wallet data and permission associations stored locally remain until the user removes them, resets the wallet, clears Extension storage, or uninstalls the Extension.
+- Disabling analytics stops future analytics transmission. Because analytics events contain no wallet address, account identifier, or persistent analytics identifier, previously collected anonymous events generally cannot be linked back to a particular user for individual deletion.
 
-For privacy questions or requests, contact:
+## 7. Data sharing and sale
 
-- **Privacy contact email:** `support@terenval.com`
-- **Support URL:** `https://terenval.com/support/`
+Terenval Wallet does not sell personal information, wallet data, browsing activity, or analytics data. Analytics data is used only for product operation, security, reliability, and development. It is not used for targeted advertising, credit decisions, insurance decisions, or unrelated profiling.
 
-## 11) Changes to this policy
+Service providers may process limited data only to host Terenval infrastructure or deliver the blockchain/RPC functionality requested by the user.
 
-This policy may be updated to reflect product, legal, or operational changes. The “Last updated” date above indicates the current revision.
+## 8. Security
+
+We use data minimization, HTTPS transport, allowlisted analytics fields, local encryption for sensitive wallet material, and automated release scanning. No software or transmission method is completely secure, and users remain responsible for protecting their device, password, and seed phrase.
+
+## 9. Children
+
+Terenval Wallet is not directed to children and is not intended for use by persons who cannot legally use cryptocurrency wallet software in their jurisdiction.
+
+## 10. Changes
+
+We may update this Privacy Policy when wallet functionality, service providers, or legal requirements change. Material changes affecting analytics or data transmission will be reflected in the Extension and may require renewed consent.
+
+## 11. Contact
+
+Questions or privacy requests may be sent to **support@terenval.com**.
