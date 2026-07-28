@@ -45,6 +45,10 @@ jobs:
           set -o pipefail
           yarn exec vite build 2>&1 | tee ../../ethereum-l2-bitcoin-build.log
 
+      - name: Scan reduced artifact for dynamic and disabled code
+        working-directory: packages/extension
+        run: node configs/cws/scan-artifact.mjs
+
       - name: Upload reduced build diagnostics
         if: always()
         uses: actions/upload-artifact@v4
@@ -59,7 +63,7 @@ jobs:
         run: |
           test -f dist/manifest.json
           node -e "const m=require('./dist/manifest.json'); if(m.manifest_version!==3) process.exit(1); if(!String(m.name).startsWith('Terenval Wallet')) process.exit(1); console.log('Manifest V3:', m.name)"
-          echo 'Ethereum/L2 + Bitcoin production build completed successfully.'
+          echo 'Ethereum/L2 + Bitcoin production build and strict artifact scan completed successfully.'
 
       - name: Upload reduced build for inspection
         uses: actions/upload-artifact@v4
