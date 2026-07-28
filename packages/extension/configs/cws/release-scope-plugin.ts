@@ -11,6 +11,11 @@ const forbiddenFragments = [
   '/packages/swap/',
   '@enkryptcom/hw-wallets',
   '@enkryptcom/swap',
+  '@massalabs/',
+  '@polkadot/',
+  '@solana/',
+  '@kadena/',
+  '@amplitude/',
 ];
 
 export default function releaseScopePlugin(): Plugin {
@@ -32,13 +37,13 @@ export default function releaseScopePlugin(): Plugin {
 
       if (violations.size > 0) {
         this.error(
-          `Disabled providers or features entered the CWS bundle:\n${[
+          `Disabled providers, hardware, swap or telemetry entered the CWS bundle:\n${[
             ...violations,
           ].join('\n')}`,
         );
       }
 
-      this.info('CWS module graph contains only the approved Ethereum/EVM and Bitcoin release scope.');
+      this.info('CWS module graph contains only approved Ethereum/L2 and Bitcoin modules.');
     },
   };
 }
