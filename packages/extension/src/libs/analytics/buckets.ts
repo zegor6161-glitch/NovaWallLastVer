@@ -10,14 +10,32 @@ const AMOUNT_BUCKET_LABELS = [
   '10000+',
 ] as const;
 
+const USD_BUCKETS = [10, 50, 100, 500, 1000, 5000] as const;
+const USD_BUCKET_LABELS = [
+  'under-10-usd',
+  '10-50-usd',
+  '50-100-usd',
+  '100-500-usd',
+  '500-1000-usd',
+  '1000-5000-usd',
+  '5000-plus-usd',
+  'unknown',
+] as const;
+
 export const bucketizeAmount = (value: number): string => {
   if (!Number.isFinite(value) || value <= 0) return AMOUNT_BUCKET_LABELS[0];
   for (let i = 0; i < AMOUNT_BUCKETS.length; i++) {
-    if (value <= AMOUNT_BUCKETS[i]) {
-      return AMOUNT_BUCKET_LABELS[i];
-    }
+    if (value <= AMOUNT_BUCKETS[i]) return AMOUNT_BUCKET_LABELS[i];
   }
   return AMOUNT_BUCKET_LABELS[AMOUNT_BUCKET_LABELS.length - 1];
+};
+
+export const bucketizeUsdAmount = (value: number): string => {
+  if (!Number.isFinite(value) || value < 0) return 'unknown';
+  for (let i = 0; i < USD_BUCKETS.length; i++) {
+    if (value < USD_BUCKETS[i]) return USD_BUCKET_LABELS[i];
+  }
+  return '5000-plus-usd';
 };
 
 export const bucketizeAccountCount = (count: number): string => {
