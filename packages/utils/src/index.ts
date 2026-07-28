@@ -6,7 +6,6 @@ import {
   numberToHex,
 } from "web3-utils";
 import { bigIntToBytes, bigIntToHex } from "@ethereumjs/util";
-import { encodeAddress as polkadotEncodeAddress } from "@polkadot/util-crypto";
 import { encrypt, decrypt } from "./encrypt";
 import MemoryStorage from "./memory-storage";
 import { fromBase, toBase, isValidDecimals } from "./units";
@@ -31,6 +30,10 @@ const hexToBuffer = (hex: string): Buffer =>
       : stripHexPrefix(hex),
     "hex",
   );
+
+const polkadotEncodeAddress = (): never => {
+  throw new Error("Polkadot address encoding is not available in this release.");
+};
 
 export {
   stripHexPrefix,
