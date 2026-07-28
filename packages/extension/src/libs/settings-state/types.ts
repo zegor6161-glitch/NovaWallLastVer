@@ -22,6 +22,8 @@ export interface EnkryptSettingsType {
   installedTimestamp: number;
   randomUserID: string;
   isMetricsEnabled: boolean;
+  analyticsConsentVersion: number;
+  analyticsConsentTimestamp: number;
 }
 
 export interface CurrencySettingsType {
