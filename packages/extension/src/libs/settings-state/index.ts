@@ -51,6 +51,8 @@ class SettingsState {
       installedTimestamp: 0,
       randomUserID: '',
       isMetricsEnabled: false,
+      analyticsConsentVersion: 0,
+      analyticsConsentTimestamp: 0,
     };
     return merge(settings, state);
   }
