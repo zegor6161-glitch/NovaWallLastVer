@@ -11,6 +11,7 @@ import transformManifest from './configs/vite/transform-manifest';
 import transformCSInject from './configs/vite/transform-cs-inject';
 import releaseScopePlugin from './configs/cws/release-scope-plugin';
 import disabledFeatureStubPlugin from './configs/cws/disabled-feature-stub-plugin';
+import analyticsAmountWiringPlugin from './configs/cws/analytics-amount-wiring-plugin.mjs';
 import { version } from './package.json';
 import wasm from 'vite-plugin-wasm';
 
@@ -50,7 +51,7 @@ export default defineConfig({
     __BUILD_TIME__: BROWSER === 'firefox' ? JSON.stringify('FF-build') : JSON.stringify(new Date().toISOString()),
   },
   plugins: [
-    ...(IS_CWS_BUILD ? [disabledFeatureStubPlugin()] : []),
+    ...(IS_CWS_BUILD ? [disabledFeatureStubPlugin(), analyticsAmountWiringPlugin()] : []),
     wasm(),
     nodePolyfills({
       include: ['crypto', 'buffer', 'util', 'stream', 'url', 'http', 'https', 'path', 'os'],
