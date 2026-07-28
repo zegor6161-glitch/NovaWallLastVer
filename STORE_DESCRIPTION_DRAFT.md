@@ -1,18 +1,10 @@
-# STORE_DESCRIPTION_DRAFT
+# Store Description Working Copy
 
-Working draft aligned with `STORE_SHORT_DESCRIPTION.txt` and `STORE_FULL_DESCRIPTION.md`.
-Use this file only as an editing helper; submit final copy from the canonical store files.
+Canonical submission text is stored in:
 
-Terenval Wallet is a self-custody browser wallet for Bitcoin, Ethereum/EVM, and Solana.
+- `STORE_SHORT_DESCRIPTION.txt`
+- `STORE_FULL_DESCRIPTION.md`
 
-Core capabilities:
-- Create/import wallet accounts.
-- View addresses, balances, and asset state.
-- Connect to compatible dApps.
-- Approve/reject signature and transaction requests.
+Current scope: a non-custodial browser wallet for Ethereum, Optimism, Arbitrum One, Base, Polygon, zkSync Era, Linea, Scroll, custom EVM networks, and Bitcoin.
 
-Disclosure summary:
-- Seed phrase/private keys/password are handled locally.
-- Broad host matching is for dApp provider interoperability on user-visited sites.
-- Telemetry/remote backup non-core paths are disabled in CWS review build mode (`VITE_CWS_REVIEW_BUILD=true`).
-- No remote executable code is used to replace extension runtime logic.
+Do not add claims about swaps, hardware wallets, remote backup, Solana, Polkadot, Kadena, Massa, Litecoin, or Dogecoin unless those features are added to the submitted ZIP and all privacy/reviewer documents are updated first.
