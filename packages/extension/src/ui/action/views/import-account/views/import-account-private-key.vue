@@ -35,7 +35,6 @@
 import { ref, computed, type PropType } from 'vue';
 import ImportAccountHeader from '../components/import-account-header.vue';
 import BaseButton from '@action/components/base-button/index.vue';
-import bs58 from 'bs58';
 import { Wallet } from '@ethereumjs/wallet';
 import { bufferToHex, hexToBuffer } from '@enkryptcom/utils';
 import { type KeyPairAdd, SignerType } from '@enkryptcom/types';
@@ -44,7 +43,6 @@ import { BaseNetwork } from '@/types/base-network';
 import { decode as wifDecode } from 'wif';
 import { ProviderName } from '@/types/provider';
 import { getPublicKey } from '@noble/secp256k1';
-import { Keypair } from '@solana/web3.js';
 
 const isProcessing = ref(false);
 const privKey = ref('');
@@ -62,7 +60,6 @@ const emit = defineEmits<{
 }>();
 
 const accountAlreadyExists = ref(false);
-
 const formattedPrivateKey = computed(() => privKey.value.trim());
 
 const isValidKey = computed(() => {
@@ -71,11 +68,9 @@ const isValidKey = computed(() => {
       const buffer = hexToBuffer(formattedPrivateKey.value);
       new Wallet(buffer);
       return true;
-    } else if (props.network.provider === ProviderName.bitcoin) {
+    }
+    if (props.network.provider === ProviderName.bitcoin) {
       wifDecode(formattedPrivateKey.value);
-      return true;
-    } else if (props.network.provider === ProviderName.solana) {
-      bs58.decode(formattedPrivateKey.value);
       return true;
     }
     return false;
@@ -115,16 +110,6 @@ const importAction = async () => {
       address: bufferToHex(getPublicKey(decoded.privateKey, true)),
       name: '',
       signerType: SignerType.secp256k1btc,
-    });
-  } else if (props.network.provider === ProviderName.solana) {
-    const decoded = bs58.decode(formattedPrivateKey.value);
-    const keypair = Keypair.fromSecretKey(decoded);
-    emit('update:wallet', {
-      privateKey: bufferToHex(decoded),
-      publicKey: bufferToHex(keypair.publicKey.toBuffer()),
-      address: bufferToHex(keypair.publicKey.toBuffer()),
-      name: '',
-      signerType: SignerType.ed25519sol,
     });
   }
 };

@@ -1,24 +1,30 @@
 <template>
   <div class="new-wallet">
     <logo-big class="new-wallet__logo" />
-    <h3>Usage analytics</h3>
+    <h3>Help improve Terenval Wallet</h3>
     <p>
-      Help us improve Terenval Wallet by sharing anonymous product analytics.
-      Analytics is optional and disabled by default.
+      You can enable optional product analytics to help us understand which
+      networks and wallet features are useful. No analytics is sent until you
+      choose an option below.
     </p>
     <p>
-      We only collect high-level product events (for example: wallet creation,
-      network switch, send/swap start and submit) and never collect your seed
-      phrase, private keys, passwords, signatures, or full transaction payloads.
+      When enabled, we collect the operation type, network/chain, feature used,
+      app version and an approximate USD amount range such as under $10 or
+      $10–$50. Event time is rounded to the hour.
     </p>
     <p>
-      You can change this anytime in Settings → General → Usage analytics.
+      We never collect seed phrases, private keys, passwords, wallet addresses,
+      transaction hashes, signatures, exact amounts, website URLs or browsing
+      history. You can disable analytics anytime in Settings → General.
+    </p>
+    <p>
+      Read the <a href="https://terenval.com/privacy/" target="_blank">Privacy Policy</a>.
     </p>
 
     <div class="new-wallet__buttons">
       <base-button title="Enable usage analytics" :click="agree" />
       <base-button
-        title="Keep usage analytics off"
+        title="Continue without analytics"
         :no-background="true"
         :click="deny"
       />
@@ -29,30 +35,24 @@
 import LogoBig from '@action/icons/common/logo-big.vue';
 import BaseButton from '@action/components/base-button/index.vue';
 import { setAnalyticsEnabled } from '@/libs/analytics';
-import { optOutofMetrics } from '@/libs/metrics';
 import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
 const route = useRoute();
 
+const finish = () => {
+  if (route.name === 'user-privacy') window.close();
+  else router.push({ name: 'new-wallet' });
+};
+
 const agree = async () => {
   await setAnalyticsEnabled(true);
-  optOutofMetrics(false);
-  if (route.name === 'user-privacy') {
-    window.close();
-  } else {
-    router.push({ name: 'new-wallet' });
-  }
+  finish();
 };
 
 const deny = async () => {
   await setAnalyticsEnabled(false);
-  optOutofMetrics(true);
-  if (route.name === 'user-privacy') {
-    window.close();
-  } else {
-    router.push({ name: 'new-wallet' });
-  }
+  finish();
 };
 </script>
 
@@ -60,10 +60,7 @@ const deny = async () => {
 @import '@action/styles/theme.less';
 
 .new-wallet {
-  &__logo {
-    margin-bottom: 24px;
-  }
-
+  &__logo { margin-bottom: 24px; }
   h3 {
     font-style: normal;
     font-weight: 700;
@@ -73,23 +70,19 @@ const deny = async () => {
     color: @primaryLabel;
     margin: 0 0 16px 0;
   }
-
   p {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;
     letter-spacing: 0.25px;
-    margin: 0 0 16px 0;
+    margin: 0 0 14px 0;
     color: @primaryLabel;
   }
-
+  a { color: @primary; }
   &__buttons {
     text-align: center;
-
-    a {
-      margin-top: 8px;
-    }
+    a { margin-top: 8px; }
   }
 }
 </style>

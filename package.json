@@ -21,7 +21,7 @@
   "scripts": {
     "test": "yarn workspaces foreach --worktree -v --exclude packages/swap run test",
     "lint": "yarn workspaces foreach --worktree run lint",
-    "build:all": "ultra -r build",
+    "build:all": "yarn workspaces foreach --worktree -pt run build",
     "watch": "concurrently 'npm:watch-*'",
     "watch-extension": "cd packages/extension && yarn watch",
     "watch-ts": "nodemon --exec 'yarn run build:all && node scripts/compile-done.js'",
@@ -39,7 +39,6 @@
     "husky": "^9.1.7",
     "node-notifier": "^10.0.1",
     "nodemon": "^3.1.11",
-    "ultra-runner": "^10.5.1",
     "vite-plugin-node-polyfills": "0.25.0"
   },
   "resolutions": {

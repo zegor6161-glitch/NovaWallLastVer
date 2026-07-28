@@ -6,9 +6,9 @@
       title="Currency"
       :value="currentSelectedCurrency"
       :list="currencyList"
-    ></settings-select>
-    <div v-if="!isCwsReviewBuild" class="settings__label">
-      <p>Select your preferred currency</p>
+    />
+    <div class="settings__label">
+      <p>Select your preferred display currency</p>
     </div>
 
     <settings-switch
@@ -16,20 +16,8 @@
       :is-checked="isEthereumDisabled"
       @update:check="toggleEthereumDisable"
     />
-    <div v-if="!isCwsReviewBuild" class="settings__label">
-      <p>
-        Pause Terenval Wallet interactions with Ethereum DApps if you are using other
-        web3 extensions
-      </p>
-    </div>
-
-    <settings-switch
-      title="Turn off Polkadot-js injection"
-      :is-checked="isPolkadotjsDisabled"
-      @update:check="togglePjsDisable"
-    />
     <div class="settings__label">
-      <p>Prevent conflict with Polkadot-js extension</p>
+      <p>Pause Ethereum dApp interactions when using another web3 extension.</p>
     </div>
 
     <settings-switch
@@ -38,64 +26,51 @@
       @update:check="toggleUnisatEnable"
     />
     <div class="settings__label">
-      <p>Enable Terenval Wallet to act like a Unisat wallet for dApps</p>
+      <p>Allow Terenval Wallet to act like a Unisat-compatible wallet for Bitcoin dApps.</p>
     </div>
 
     <settings-switch
-      v-if="!isCwsReviewBuild"
       title="Usage analytics"
       :is-checked="isMetricsEnabled"
       @update:check="toggleMetricsEnabled"
     />
     <div class="settings__label">
       <p>
-        Anonymous product analytics helps us improve Terenval Wallet. This never includes seed phrase, private keys, passwords, raw signatures, or full transaction data.
+        Sends operation type, network, feature, app version and approximate USD
+        amount range to Terenval. Never sends seed phrases, private keys, wallet
+        addresses, transaction hashes, exact amounts or browsing history.
+        <a href="https://terenval.com/privacy/" target="_blank">Privacy Policy</a>
       </p>
     </div>
+
     <settings-button
       v-if="!isCwsReviewBuild"
       title="Settings backup"
       @click="$emit('open:backups')"
     />
-    <div class="settings__label">
-      <p>
-        Save your current list of accounts across all networks, so you don't
-        need to re-generate them.
-      </p>
+    <div v-if="!isCwsReviewBuild" class="settings__label">
+      <p>Save your current account list so it can be restored later.</p>
     </div>
-    <!-- <base-select
-      :select="selecTimer"
-      title="Auto-lock timer"
-      :value="timer"
-      :list="timerList"
-    ></base-select> -->
-
-    <!-- <div class="settings__label">
-      <p>Set the idle time in minutes before Terenval Wallet will become locked.</p>
-    </div> -->
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import SettingsInnerHeader from '@action/views/settings/components/settings-inner-header.vue';
-// import BaseSelect from '@action/components/base-select/index.vue';
 import SettingsSelect from '@action/views/settings/components/settings-select.vue';
 import SettingsButton from '@action/views/settings/components/settings-button.vue';
 import SettingsSwitch from '@action/views/settings/components/settings-switch.vue';
 import SettingsState from '@/libs/settings-state';
 import { SettingsType } from '@/libs/settings-state/types';
-import { optOutofMetrics } from '@/libs/metrics';
+import { setAnalyticsEnabled } from '@/libs/analytics';
 import { useCurrencyStore } from '../../store';
 import { storeToRefs } from 'pinia';
 import { IS_CWS_REVIEW_BUILD } from '@/configs/review-build';
 
 const settingsState = new SettingsState();
 const isEthereumDisabled = ref(false);
-const isPolkadotjsDisabled = ref(false);
 const isUnisatEnabled = ref(true);
 const isMetricsEnabled = ref(false);
-
 const store = useCurrencyStore();
 const isCwsReviewBuild = IS_CWS_REVIEW_BUILD;
 const { setSelectedCurrency } = store;
@@ -105,25 +80,17 @@ defineEmits<{ (e: 'open:backups'): void }>();
 onMounted(async () => {
   const allSettings: SettingsType = await settingsState.getAllSettings();
   isEthereumDisabled.value = allSettings.evm.inject.disabled;
-  isPolkadotjsDisabled.value = !allSettings.substrate.injectPolkadotjs;
   isUnisatEnabled.value = allSettings.btc.injectUnisat;
   isMetricsEnabled.value = allSettings.enkrypt.isMetricsEnabled;
 });
+
 const toggleEthereumDisable = async (isChecked: boolean) => {
   const evmSettings = await settingsState.getEVMSettings();
-  evmSettings.inject = { disabled: isChecked, timestamp: new Date().getTime() };
+  evmSettings.inject = { disabled: isChecked, timestamp: Date.now() };
   await settingsState.setEVMSettings(evmSettings);
   isEthereumDisabled.value = isChecked;
 };
-const selectCurrency = async (currency: string) => {
-  setSelectedCurrency(currency);
-};
-const togglePjsDisable = async (isChecked: boolean) => {
-  const subSettings = await settingsState.getSubstrateSettings();
-  subSettings.injectPolkadotjs = !isChecked;
-  await settingsState.setSubstrateSettings(subSettings);
-  isPolkadotjsDisabled.value = isChecked;
-};
+const selectCurrency = async (currency: string) => setSelectedCurrency(currency);
 const toggleUnisatEnable = async (isChecked: boolean) => {
   const btcSettings = await settingsState.getBtcSettings();
   btcSettings.injectUnisat = isChecked;
@@ -131,17 +98,13 @@ const toggleUnisatEnable = async (isChecked: boolean) => {
   isUnisatEnabled.value = isChecked;
 };
 const toggleMetricsEnabled = async (isChecked: boolean) => {
-  const enkryptSettings = await settingsState.getEnkryptSettings();
-  enkryptSettings.isMetricsEnabled = isChecked;
-  await settingsState.setEnkryptSettings(enkryptSettings);
-  optOutofMetrics(!isChecked);
+  await setAnalyticsEnabled(isChecked);
   isMetricsEnabled.value = isChecked;
 };
 </script>
 
 <style lang="less">
 @import '@action/styles/theme.less';
-
 .settings {
   &__label {
     padding: 0 48px;
@@ -155,12 +118,7 @@ const toggleMetricsEnabled = async (isChecked: boolean) => {
       color: @tertiaryLabel;
       margin: 0;
     }
-  }
-
-  &__wrap {
-    .base-select__container {
-      margin-bottom: 12px;
-    }
+    a { color: @primary; }
   }
 }
 </style>

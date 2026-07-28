@@ -38,10 +38,8 @@ import ImportAccountHeader from '../components/import-account-header.vue';
 import BaseInput from '@action/components/base-input/index.vue';
 import BaseButton from '@action/components/base-button/index.vue';
 import { Wallet, thirdparty } from '@ethereumjs/wallet';
-import type { KeyringPair$Json } from '@polkadot/keyring/types';
 import { BaseNetwork } from '@/types/base-network';
 import { ProviderName } from '@/types/provider';
-import { getAccountFromJSON } from '@/providers/polkadot/libs/keystore';
 import { KeyPairAdd } from '@enkryptcom/types';
 import PublicKeyRing from '@/libs/keyring/public-keyring';
 
@@ -51,7 +49,6 @@ const emit = defineEmits<{
 }>();
 
 const keyring = new PublicKeyRing();
-
 const error = ref('');
 
 const props = defineProps({
@@ -74,9 +71,7 @@ const props = defineProps({
 });
 
 const isProcessing = ref(false);
-const isDisabled = computed(() => {
-  return props.keystorePassword.length < 3;
-});
+const isDisabled = computed(() => props.keystorePassword.length < 3);
 
 const fromMyEtherWalletV2 = (json: any) => {
   if (json.privKey.length !== 64) {
@@ -92,12 +87,13 @@ const getWalletFromPrivKeyFile = (
 ): Promise<Wallet> => {
   if (jsonfile.encseed != null)
     return Promise.resolve(Wallet.fromEthSale(jsonfile, password));
-  else if (jsonfile.Crypto != null || jsonfile.crypto != null) {
+  if (jsonfile.Crypto != null || jsonfile.crypto != null) {
     if (jsonfile.Crypto) jsonfile.crypto = jsonfile.Crypto;
     return Wallet.fromV3(jsonfile, password, true);
-  } else if (jsonfile.hash != null)
+  }
+  if (jsonfile.hash != null)
     return Promise.resolve(thirdparty.fromEtherWallet(jsonfile, password));
-  else if (jsonfile.publisher == 'MyEtherWallet')
+  if (jsonfile.publisher == 'MyEtherWallet')
     return Promise.resolve(fromMyEtherWalletV2(jsonfile));
   throw new Error('Invalid Wallet file');
 };
@@ -106,48 +102,35 @@ const unlock = async () => {
   isProcessing.value = true;
   error.value = '';
 
-  if (props.network.provider === ProviderName.ethereum) {
-    try {
-      const wallet = await getWalletFromPrivKeyFile(
-        props.fileJson,
-        props.keystorePassword,
-      );
+  if (props.network.provider !== ProviderName.ethereum) {
+    isProcessing.value = false;
+    error.value = 'Keystore import is available only for Ethereum accounts';
+    return;
+  }
 
-      const newAddress = wallet.getAddressString();
+  try {
+    const wallet = await getWalletFromPrivKeyFile(
+      props.fileJson,
+      props.keystorePassword,
+    );
+    const newAddress = wallet.getAddressString();
 
-      if (await keyring.accountAlreadyAdded(newAddress)) {
-        error.value = 'This account has already been added';
-        return;
-      }
-
-      emit('update:wallet', {
-        privateKey: wallet.getPrivateKeyString(),
-        publicKey: wallet.getPublicKeyString(),
-        address: wallet.getAddressString(),
-        name: '',
-        signerType: props.network.signer[0],
-      });
-    } catch (e) {
+    if (await keyring.accountAlreadyAdded(newAddress)) {
+      error.value = 'This account has already been added';
       isProcessing.value = false;
-      error.value = (e as Error).message;
+      return;
     }
-  } else if (props.network.provider === ProviderName.polkadot) {
-    try {
-      const account = getAccountFromJSON(
-        props.fileJson as KeyringPair$Json,
-        props.keystorePassword,
-      );
 
-      if (await keyring.accountAlreadyAdded(account.address)) {
-        error.value = 'This account has already been added';
-        return;
-      }
-
-      emit('update:wallet', account);
-    } catch (e: any) {
-      isProcessing.value = false;
-      error.value = e.message;
-    }
+    emit('update:wallet', {
+      privateKey: wallet.getPrivateKeyString(),
+      publicKey: wallet.getPublicKeyString(),
+      address: wallet.getAddressString(),
+      name: '',
+      signerType: props.network.signer[0],
+    });
+  } catch (e) {
+    isProcessing.value = false;
+    error.value = (e as Error).message;
   }
 };
 </script>

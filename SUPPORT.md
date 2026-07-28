@@ -1,20 +1,17 @@
-# Support
-
-For support requests related to Terenval Wallet extension:
+# Terenval Wallet Support
 
 - Support email: `support@terenval.com`
-- Privacy email: `support@terenval.com`
+- Privacy contact: `support@terenval.com`
 - Support URL: `https://terenval.com/support/`
 
-## Recommended issue template
+When reporting a problem, include:
 
-Please include:
+1. Extension version.
+2. Chrome version and operating system.
+3. Network used: Ethereum, an included Layer 2, custom EVM, or Bitcoin.
+4. Feature used: account creation/import, balance display, manual send, dApp connection, signature request, transaction request, custom network, or analytics setting.
+5. Exact reproduction steps.
+6. Expected and actual result.
+7. Any visible error message.
 
-1. Extension version
-2. Browser name and version
-3. Network and feature used (send/swap/dApp connect/etc.)
-4. Reproduction steps
-5. Expected result vs actual result
-6. Any error message shown in UI
-
-Do **not** share your seed phrase, private key, or password in support requests.
+Never send a seed phrase, private key, wallet password, PIN, signed raw transaction, or other secret credential to support. Redact wallet addresses, transaction hashes, dApp domains, and balances unless they are necessary to investigate the issue and you understand they are public or sensitive contextual data.

@@ -1,56 +1,33 @@
-# PERMISSIONS_JUSTIFICATION
+# Chrome Web Store Permission Justifications — Terenval Wallet
 
-## permissions
+These explanations must match the final `manifest.json` in the submitted ZIP.
 
-### storage
-- Why: Persist wallet settings, lock state, network preferences, and local wallet metadata.
-- Feature: Core wallet state persistence.
-- Code: `src/libs/settings-state/*`, `src/libs/keyring/*`, `src/libs/backup-state/index.ts`.
-- Removable: No (core functionality).
-- Review risk: Low if clearly documented.
+## `storage`
 
-### unlimitedStorage
-- Why: Prevent quota issues for multi-chain state caches and account/activity metadata.
-- Feature: Stable local wallet operation across many networks/assets.
-- Code: cache/state modules under `src/libs/*-state`.
-- Removable: Possibly with functional degradation and data loss risk.
-- Review risk: Medium optics; justify as wallet-state reliability.
+Terenval Wallet uses extension storage to persist encrypted wallet state, public account metadata, selected accounts and networks, custom EVM configurations, connected-site permissions, local transaction activity, preferences, lock state, and analytics consent. Without this permission the wallet could not preserve accounts and settings between browser sessions.
 
-### tabs
-- Why: Open/focus onboarding, support links, and wallet-triggered flows.
-- Feature: User navigation from extension workflows.
-- Code: `src/libs/utils/open-onboard.ts`, UI settings/support routes.
-- Removable: Potentially partly, but would break expected UX.
-- Review risk: Medium; explain exact user-triggered usage.
+## `tabs`
 
-### clipboardWrite
-- Why: Copy address/tx identifiers on explicit user action.
-- Feature: Wallet usability.
-- Code: action UI components with copy interactions.
-- Removable: Yes, but degrades core UX.
-- Review risk: Low-Medium.
+The wallet reads the active tab ID, URL/domain, page title, and favicon when processing a dApp request. This lets the approval screen identify the requesting website, associate the approved account/network with the correct origin, and return the result to the correct browser tab. The permission is not used for browsing-history analytics, advertising, page scraping, or monitoring unrelated activity.
 
-## host permissions via content script matches
+## `clipboardWrite`
 
-### http://*/* and https://*/*
-- Why: Required for universal dApp provider availability.
-- Feature: EIP-1193/EIP-6963 wallet detection and connection on arbitrary dApp origins.
-- Code: `configs/vite/transform-manifest.ts`, `src/scripts/inject.ts`, `src/scripts/contentscript.ts`.
-- Removable: No, without major dApp compatibility breakage.
-- Review risk: High optics; mitigated by strict reviewer justification and no secret exfil behavior.
+The wallet writes to the clipboard only after an explicit user action, such as clicking a control to copy a public wallet address or public transaction-related value.
 
-### *://connect.trezor.io/*/*
-- Why: Hardware wallet integration support.
-- Feature: Trezor connect content script workflow (hardware-wallet interoperability only).
-- Code: `configs/vite/transform-manifest.ts`, `public/vendor/trezor-content-script.js`.
-- Removable: Yes if Trezor support is fully removed through dedicated refactor; not changed in this pass to avoid breakage risk for hardware-wallet abstractions.
-- Review risk: Medium.
+## Broad HTTPS content-script matches
 
-## other manifest surfaces
+Compatible dApps can exist on arbitrary HTTPS origins and expect a wallet provider to be present in page context at load time. Packaged bridge scripts therefore run at `document_start` to expose Ethereum and Bitcoin provider interfaces and forward user-initiated requests to the Extension.
 
-- `externally_connectable`: not configured.
-- `web_accessible_resources`: limited to local injection scripts for provider bridge.
-- CSP: extension pages use `'self'` plus `'wasm-unsafe-eval'` for bundled local wasm crypto compatibility (e.g., `@polkadot/wasm-crypto` signing paths).
-- `wasm-unsafe-eval` is not used to load or execute arbitrary remote code; extension logic is shipped in-package.
+No account is exposed, signature created, or transaction submitted without a separate user decision in Extension UI. The scripts do not scrape website content, credentials, forms, communications, or browsing history and do not load remote executable code.
 
+## `web_accessible_resources`
 
+Only the packaged provider bridge script is exposed to HTTPS pages so the Extension can place its provider in the page’s MAIN world. It is not a general remote-code loader.
+
+## Content Security Policy
+
+Extension pages use `script-src 'self' 'wasm-unsafe-eval'; object-src 'self'`. The WebAssembly allowance is required only for bundled cryptographic dependencies. The release scanner rejects remote script execution patterns.
+
+## Permissions intentionally absent
+
+The Chrome Web Store release does not request `unlimitedStorage`, history, cookies, downloads, geolocation, notifications, identity, webRequest, debugger, nativeMessaging, or hardware-device permissions.

@@ -46,11 +46,7 @@ class BackgroundHandler {
     this.#settingsState = new SettingsState();
     this.#tabProviders = {
       [ProviderName.ethereum]: {},
-      [ProviderName.polkadot]: {},
       [ProviderName.bitcoin]: {},
-      [ProviderName.kadena]: {},
-      [ProviderName.solana]: {},
-      [ProviderName.massa]: {},
     };
     this.#providers = Providers;
     this.#geoRestricted = undefined;
@@ -58,16 +54,15 @@ class BackgroundHandler {
       this.#geoRestricted = restricted;
     });
   }
+
   async init(): Promise<void> {
     await handlePersistentEvents.bind(this)();
     const enkryptSettings = await this.#settingsState.getEnkryptSettings();
     if (!enkryptSettings.installedTimestamp) {
       await this.#settingsState.setEnkryptSettings({
         ...enkryptSettings,
-        ...{
-          installedTimestamp: new Date().getTime(),
-          randomUserID: randomUUID(),
-        },
+        installedTimestamp: new Date().getTime(),
+        randomUserID: randomUUID(),
       });
     } else {
       await this.#settingsState.setEnkryptSettings({
@@ -76,6 +71,7 @@ class BackgroundHandler {
       });
     }
   }
+
   async externalHandler(
     msg: Message,
     options: ExternalMessageOptions = { savePersistentEvents: true },
@@ -83,6 +79,7 @@ class BackgroundHandler {
     const { method, params } = JSON.parse(msg.message);
     const _provider = msg.provider;
     const _tabid = msg.sender.tabId;
+
     if (_provider === ProviderName.enkrypt) {
       if (
         method === InternalMethods.newWindowInit ||
@@ -92,20 +89,26 @@ class BackgroundHandler {
         isGeoRestricted().then(restricted => {
           this.#geoRestricted = restricted;
         });
-        return {
-          result: JSON.stringify(true),
-        };
-      } else if (method === InternalMethods.getSettings) {
-        return this.#settingsState.getAllSettings().then(settings => {
-          return {
-            result: JSON.stringify(settings),
-          };
-        });
+        return { result: JSON.stringify(true) };
+      }
+      if (method === InternalMethods.getSettings) {
+        return this.#settingsState.getAllSettings().then(settings => ({
+          result: JSON.stringify(settings),
+        }));
       }
       return {
         error: JSON.stringify(getCustomError('Terenval Wallet: not implemented')),
       };
     }
+
+    if (!this.#providers[_provider] || !this.#tabProviders[_provider]) {
+      return {
+        error: JSON.stringify(
+          getCustomError(`Terenval Wallet: provider ${_provider} is disabled`),
+        ),
+      };
+    }
+
     if (this.#geoRestricted !== undefined && this.#geoRestricted) {
       return {
         error: JSON.stringify(
@@ -115,16 +118,11 @@ class BackgroundHandler {
         ),
       };
     }
+
     const tabInfo = TabInfo(await Browser.tabs.get(_tabid));
     if (!this.#tabProviders[_provider][_tabid]) {
       const toWindow = (message: string) => {
-        sendToWindow(
-          {
-            provider: _provider,
-            message,
-          },
-          _tabid,
-        );
+        sendToWindow({ provider: _provider, message }, _tabid);
       };
       this.#tabProviders[_provider][_tabid] = new this.#providers[_provider](
         toWindow,
@@ -137,7 +135,6 @@ class BackgroundHandler {
           _provider,
           domainState.selectedNetwork,
         );
-
         if (providerNetwork) {
           this.#tabProviders[_provider][_tabid].setRequestProvider(
             providerNetwork,
@@ -145,23 +142,23 @@ class BackgroundHandler {
         }
       }
     }
+
     const isPersistent = await this.#tabProviders[_provider][
       _tabid
     ].isPersistentEvent({ method, params });
+
     return this.#tabProviders[_provider][_tabid]
-      .request({
-        method,
-        params,
-        options: tabInfo,
-      })
+      .request({ method, params, options: tabInfo })
       .then(response => {
-        if (isPersistent && !response.error && options.savePersistentEvents)
+        if (isPersistent && !response.error && options.savePersistentEvents) {
           return this.#persistentEvents
             .addEvent(_tabid, msg, response)
             .then(() => response);
+        }
         return response;
       });
   }
+
   internalHandler(msg: Message): Promise<InternalOnMessageResponse> {
     const message = JSON.parse(msg.message) as RPCRequestType;
     switch (message.method) {

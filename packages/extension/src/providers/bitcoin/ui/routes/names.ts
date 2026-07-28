@@ -14,9 +14,4 @@ export default {
     name: 'btcConnectDApp',
     component: {},
   },
-  btcHWVerify: {
-    path: 'btc-hw-verify',
-    name: 'btcHWVerify',
-    component: {},
-  },
 };

@@ -1,0 +1,71 @@
+name: CWS release gate
+
+on:
+  pull_request:
+    paths:
+      - 'packages/**'
+      - '.github/workflows/cws-release.yml'
+      - 'yarn.lock'
+      - 'package.json'
+
+permissions:
+  contents: read
+
+jobs:
+  cws-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      YARN_ENABLE_IMMUTABLE_INSTALLS: 'false'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Activate Yarn 4.5.1
+        run: |
+          corepack enable
+          corepack prepare yarn@4.5.1 --activate
+          yarn --version
+
+      - name: Install dependencies without lifecycle scripts
+        shell: bash
+        run: |
+          set -o pipefail
+          yarn install --mode=skip-build 2>&1 | tee yarn-install.log
+
+      - name: Upload Yarn install diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cws-yarn-install-log
+          path: yarn-install.log
+          if-no-files-found: warn
+          retention-days: 3
+
+      - name: Typecheck, build, scan and package
+        shell: bash
+        run: |
+          set -o pipefail
+          node packages/extension/configs/cws/release.mjs 2>&1 | tee cws-release.log
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+
+      - name: Upload CWS release diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cws-release-log
+          path: cws-release.log
+          if-no-files-found: warn
+          retention-days: 3
+
+      - name: Upload exact CWS ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: terenval-wallet-cws
+          path: packages/extension/release/terenval-wallet-cws.zip
+          if-no-files-found: error
+          retention-days: 14

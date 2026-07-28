@@ -1,0 +1,75 @@
+name: Ethereum L2 Bitcoin build gate
+
+on:
+  pull_request:
+    paths:
+      - 'packages/**'
+      - '.github/workflows/cws-scope-build.yml'
+      - 'yarn.lock'
+      - 'package.json'
+
+permissions:
+  contents: read
+
+jobs:
+  ethereum-l2-bitcoin-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      YARN_ENABLE_IMMUTABLE_INSTALLS: 'false'
+      NODE_OPTIONS: --max-old-space-size=8192
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Activate Yarn 4.5.1
+        run: |
+          corepack enable
+          corepack prepare yarn@4.5.1 --activate
+          yarn --version
+
+      - name: Install dependencies without lifecycle scripts
+        run: yarn install --mode=skip-build
+
+      - name: Build reduced Ethereum L2 Bitcoin extension
+        working-directory: packages/extension
+        shell: bash
+        env:
+          BROWSER: chrome
+          NODE_ENV: production
+          CWS_RELEASE: 'true'
+          VITE_CWS_REVIEW_BUILD: 'true'
+        run: |
+          set -o pipefail
+          yarn exec vite build 2>&1 | tee ../../ethereum-l2-bitcoin-build.log
+
+      - name: Scan reduced artifact for dynamic and disabled code
+        working-directory: packages/extension
+        run: node configs/cws/scan-artifact.mjs
+
+      - name: Upload reduced build diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ethereum-l2-bitcoin-build-log
+          path: ethereum-l2-bitcoin-build.log
+          if-no-files-found: warn
+          retention-days: 3
+
+      - name: Confirm manifest and reduced provider scope
+        working-directory: packages/extension
+        run: |
+          test -f dist/manifest.json
+          node -e "const m=require('./dist/manifest.json'); if(m.manifest_version!==3) process.exit(1); if(!String(m.name).startsWith('Terenval Wallet')) process.exit(1); if((m.permissions||[]).includes('unlimitedStorage')) process.exit(1); console.log('Manifest V3:', m.name, m.permissions)"
+          echo 'Ethereum/L2 + Bitcoin production build and strict artifact scan completed successfully.'
+
+      - name: Upload reduced build for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: terenval-ethereum-l2-bitcoin-dist
+          path: packages/extension/dist
+          if-no-files-found: error
+          retention-days: 7

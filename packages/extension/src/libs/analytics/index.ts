@@ -4,30 +4,47 @@ import { AnalyticsTransport } from './transport';
 import { ProductAnalyticsEvent, ProductEventType } from './types';
 import { isTelemetryAllowed } from '@/configs/review-build';
 
-const DEFAULT_ENDPOINT = 'https://analytics-enkrypt.mewwallet.dev/product-events';
+export const ANALYTICS_CONSENT_VERSION = 1;
+const DEFAULT_ENDPOINT = 'https://analytics.terenval.com/product-events';
+const ONE_HOUR_MS = 60 * 60 * 1000;
+
+const getRoundedTimestamp = (): string =>
+  new Date(Math.floor(Date.now() / ONE_HOUR_MS) * ONE_HOUR_MS).toISOString();
+
+const isApprovedEndpoint = (endpoint: string): boolean => {
+  try {
+    const url = new URL(endpoint);
+    const isLocalDevelopment =
+      import.meta.env.DEV && ['localhost', '127.0.0.1'].includes(url.hostname);
+    const isTerenvalEndpoint =
+      url.hostname === 'terenval.com' || url.hostname.endsWith('.terenval.com');
+    return (url.protocol === 'https:' && isTerenvalEndpoint) || isLocalDevelopment;
+  } catch {
+    return false;
+  }
+};
 
 class AnalyticsService {
   private settings = new SettingsState();
   private enabled = false;
   private initialized = false;
-  private analyticsId = '';
   private transport: AnalyticsTransport | null = null;
 
   private getEndpoint(): string {
     if (!isTelemetryAllowed()) return '';
     const endpoint = import.meta.env.VITE_ANALYTICS_ENDPOINT || DEFAULT_ENDPOINT;
-    return endpoint;
+    return isApprovedEndpoint(endpoint) ? endpoint : '';
   }
 
   async initAnalytics() {
     if (this.initialized) return;
     const settings = await this.settings.getEnkryptSettings();
-    this.enabled = isTelemetryAllowed() && Boolean(settings.isMetricsEnabled);
-    this.analyticsId = settings.randomUserID || '';
+    this.enabled =
+      isTelemetryAllowed() &&
+      settings.isMetricsEnabled === true &&
+      settings.analyticsConsentVersion === ANALYTICS_CONSENT_VERSION;
     const endpoint = this.getEndpoint();
-    if (endpoint.startsWith('https://')) {
-      this.transport = new AnalyticsTransport(endpoint);
-    }
+    if (endpoint) this.transport = new AnalyticsTransport(endpoint);
     this.initialized = true;
   }
 
@@ -40,6 +57,8 @@ class AnalyticsService {
     await this.initAnalytics();
     const settings = await this.settings.getEnkryptSettings();
     settings.isMetricsEnabled = value;
+    settings.analyticsConsentVersion = ANALYTICS_CONSENT_VERSION;
+    settings.analyticsConsentTimestamp = Date.now();
     await this.settings.setEnkryptSettings(settings);
     this.enabled = isTelemetryAllowed() && value;
   }
@@ -48,20 +67,19 @@ class AnalyticsService {
     try {
       await this.initAnalytics();
       if (!this.enabled || !this.transport) return;
-      // SECURITY: never log or transmit seed phrases, private keys, passwords,
-      // raw signatures, or full transaction payloads through analytics.
       const payload: ProductAnalyticsEvent = {
         event,
         properties: {
           platform: 'extension',
-          analytics_id: this.analyticsId,
+          app_version: __PACKAGE_VERSION__,
+          consent_version: ANALYTICS_CONSENT_VERSION,
           ...sanitizeProperties(properties),
         },
-        timestamp: new Date().toISOString(),
+        timestamp: getRoundedTimestamp(),
       };
       this.transport.enqueue(payload);
     } catch {
-      // analytics must never break UI
+      // Analytics must never break wallet functionality.
     }
   }
 }

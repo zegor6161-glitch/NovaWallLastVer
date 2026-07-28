@@ -1,8 +1,5 @@
 import type { InjectedProvider as EthereumProvider } from '../providers/ethereum/types';
-import type { InjectedProvider as PolkadotProvider } from '@/providers/polkadot/types';
 import type { InjectedProvider as BitcoinProvider } from '@/providers/bitcoin/types';
-import type { InjectedProvider as KadenaProvider } from '@/providers/kadena/types';
-import type { InjectedProvider as SolanaProvider } from '@/providers/solana/types';
 import EventEmitter from 'eventemitter3';
 import {
   MiddlewareFunction,
@@ -17,19 +14,13 @@ import { RoutesType } from './ui';
 import { NFTCollection } from './nft';
 import { BaseNetwork } from './base-network';
 import { BaseToken } from './base-token';
-import {
-  BTCRawInfo,
-  EthereumRawInfo,
-  SubscanExtrinsicInfo,
-  KadenaRawInfo,
-  SOLRawInfo,
-  MassaRawInfo,
-} from './activity';
+import { BTCRawInfo, EthereumRawInfo } from './activity';
 
 export enum ProviderName {
   enkrypt = 'enkrypt',
   ethereum = 'ethereum',
   bitcoin = 'bitcoin',
+  // Kept for storage migration and explicit rejection of legacy requests.
   polkadot = 'polkadot',
   kadena = 'kadena',
   solana = 'solana',
@@ -66,8 +57,9 @@ export enum EnkryptProviderEventMethods {
 export type StorageNamespace = ProviderName | InternalStorageNamespace;
 export enum ProviderType {
   evm,
-  substrate,
   bitcoin,
+  // Legacy values remain stable for persisted data and migrations.
+  substrate,
   kadena,
   solana,
   massa,
@@ -128,10 +120,7 @@ export abstract class BackgroundProviderInterface extends EventEmitter {
 }
 
 /**
- * Wraps basic network functionality to provide common features like balances and transaction statuses.
- *
- * Each network type will typically have its own implementing class. For example, for EVM networks the implementing
- * class need just wrap JSON RPC calls.
+ * Common network functionality used by the CWS Ethereum/L2 and Bitcoin build.
  */
 export abstract class ProviderAPIInterface {
   abstract node: string;
@@ -141,15 +130,7 @@ export abstract class ProviderAPIInterface {
   abstract getBalance(address: string): Promise<string>;
   abstract getTransactionStatus(
     hash: string,
-  ): Promise<
-    | EthereumRawInfo
-    | SubscanExtrinsicInfo
-    | BTCRawInfo
-    | KadenaRawInfo
-    | SOLRawInfo
-    | MassaRawInfo
-    | null
-  >;
+  ): Promise<EthereumRawInfo | BTCRawInfo | null>;
 }
 
 export type handleIncomingMessage = (
@@ -161,19 +142,9 @@ export type handleOutgoingMessage = (
   provider: Provider,
   message: string,
 ) => Promise<any>;
-export {
-  EthereumProvider,
-  PolkadotProvider,
-  BitcoinProvider,
-  KadenaProvider,
-  SolanaProvider,
-};
-export type Provider =
-  | EthereumProvider
-  | PolkadotProvider
-  | BitcoinProvider
-  | KadenaProvider
-  | SolanaProvider;
+
+export { EthereumProvider, BitcoinProvider };
+export type Provider = EthereumProvider | BitcoinProvider;
 
 export interface ProviderRequestOptions {
   url: string;
@@ -182,6 +153,7 @@ export interface ProviderRequestOptions {
   title: string;
   tabId: number;
 }
+
 export interface ProviderRPCRequest extends RPCRequestType {
   options?: ProviderRequestOptions;
 }

@@ -5,10 +5,11 @@ const { version } = packageJson;
 export default {
   homepage_url: 'https://terenval.com/',
   version,
-  name: 'Terenval Wallet: ETH, BTC and Solana Wallet',
+  name: 'Terenval Wallet: Ethereum, L2 and Bitcoin',
   short_name: 'Terenval',
-  description: 'Multi-chain browser wallet for dApp connection and transaction signing',
-  permissions: ['storage', 'unlimitedStorage', 'tabs', 'clipboardWrite'],
+  description:
+    'Non-custodial Ethereum, Layer 2 and Bitcoin wallet for dApp connection and transaction signing',
+  permissions: ['storage', 'tabs', 'clipboardWrite'],
   action: {
     default_icon: {
       '16': 'assets/img/icons/icon16.png',

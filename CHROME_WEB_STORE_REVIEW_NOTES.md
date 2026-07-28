@@ -1,131 +1,74 @@
 # Chrome Web Store Reviewer Notes — Terenval Wallet
 
-## 1) What this extension is
+## Product and single purpose
 
-Terenval Wallet is a **browser extension cryptocurrency wallet**. It provides account management, signing, and transaction workflows for supported networks (including Bitcoin, Ethereum/EVM, and Solana), and injects wallet providers for dApp connectivity.
+Terenval Wallet is a non-custodial browser wallet for Ethereum, selected Ethereum Layer 2 networks, custom EVM networks, and Bitcoin. Its single purpose is to let users manage wallet accounts, view assets, connect to compatible dApps, review signing requests, and submit user-approved transactions.
 
-## 2) Single purpose
+Built-in networks in this release: Ethereum, Optimism, Arbitrum One, Base, Polygon, zkSync Era, Linea, Scroll, and Bitcoin.
 
-**Single purpose:** provide end users with a multi-chain self-custody wallet in the browser (account access, balance/asset viewing, transaction signing, and dApp connection).
+The submitted build excludes Solana, Polkadot, Kadena, Massa, Litecoin, Dogecoin, swaps, hardware-wallet integrations, promotions, surveys, and remote settings backup.
 
-## 3) Sensitive credentials handling
+## Secret material
 
-- Seed phrase (mnemonic), private keys, and wallet password are handled locally in extension workflows.
+Seed phrases, private keys, wallet passwords, PINs, and signing operations remain on the user’s device. They are not transmitted to Terenval, RPC providers, analytics, market-data providers, block explorers, or connected websites. Terenval cannot recover lost credentials.
 
-Additional security/privacy clarification for review:
+## dApp access and broad site matching
 
-The extension does not transmit seed phrases, private keys, or passwords to any external servers.
+Packaged content scripts run at `document_start` on HTTPS pages so compatible dApps can discover the Ethereum/EIP-1193/EIP-6963 and Bitcoin/Unisat-compatible providers. The bridge forwards wallet requests between the page and the Extension.
 
-All sensitive cryptographic material is generated, stored, and processed locally within the extension.
+This access is not used to scrape page text, forms, credentials, communications, or browsing history. Account access, signatures, and transactions are never auto-approved; the user must approve them in Extension UI.
 
-Network requests are limited to blockchain RPC endpoints and related services necessary for wallet functionality (balances, transactions, token metadata).
+## Permissions
 
-The extension does not perform hidden data collection, tracking, or user profiling.
+- `storage`: persists encrypted wallet state, public account metadata, settings, custom networks, connected-site permissions, local activity, and analytics consent.
+- `tabs`: reads the active tab ID, URL/domain, title, and favicon to identify the requesting dApp, associate permissions with the correct origin, and route the response to the correct tab.
+- `clipboardWrite`: copies public wallet addresses or other public values only after a user clicks a copy control.
 
-## 4) Permission rationale (high-level)
+The release does not request `unlimitedStorage`.
 
-- `storage`, `unlimitedStorage`: persist encrypted wallet state, settings, account metadata, tokens/NFT/activity caches.
-- `tabs`: open/focus wallet-related tabs (onboarding, hardware wallet flows, external links) and handle wallet-initiated tab interactions.
-- `clipboardWrite`: user-triggered copy actions (for example, copy public address).
+## Network traffic
 
-## 5) Host permissions / broad site matching rationale
+Expected traffic is limited to:
 
-The extension uses content scripts and provider injection on user-visited websites (`http://*/*`, `https://*/*`) so dApps can detect/connect to the wallet provider and request signatures/accounts with explicit user interaction.
+- the configured Ethereum/EVM RPC for balance/state reads, fee estimation, and broadcasting user-approved signed transactions;
+- `mempool.space` for Bitcoin balance, UTXO, transaction-status, fee, and broadcast operations;
+- `api-v3.ethvm.dev` and `mainnet.mewwallet.dev` for market information;
+- `analytics.terenval.com/product-events` only after explicit analytics opt-in;
+- a block explorer opened by explicit user action;
+- a custom EVM RPC/explorer entered by the user.
 
-Additional targeted matching is used for Trezor connect integration paths.
+The release scanner rejects legacy Enkrypt/MEW RPC, screening, backup, swap, and analytics endpoints.
 
-## Why all-sites + MAIN world is required for provider interoperability
+## Optional analytics
 
-Browser wallets use an established provider pattern: dApps expect a wallet provider object to be available on the page context (`window`) when the user opens a dApp.
+Analytics is off until the user chooses **Enable usage analytics**. A **Continue without analytics** option is available on the same screen, and the user can opt out later in Settings.
 
-For that reason, Terenval Wallet keeps provider injection available on user-visited sites and uses MAIN world/page context so dApp discovery and interoperability patterns (including standard wallet-provider discovery flows) work as expected.
+Allowlisted analytics is limited to event type, network/chain, feature/source category, asset symbol, approximate USD amount bucket, Extension version, consent version, and hour-rounded timestamp. It excludes addresses, public keys, transaction hashes, signatures, raw transactions, exact values, website information, secret credentials, PII, and persistent analytics identifiers.
 
-In practical terms, this access is used to:
+## Remote code
 
-- expose wallet provider interfaces to dApps;
-- receive dApp-initiated connect/sign/transaction requests;
-- forward those requests to extension UI for explicit user decision.
+All executable Extension logic is packaged in the submitted ZIP. The build scanner rejects `eval`, `Function` constructors, remote `importScripts`, remote dynamic imports, and remote script tags. RPC, blockchain, market, and analytics responses are data and do not replace Extension logic.
 
-This access is **not** used for ad-tech, hidden tracking, arbitrary content manipulation, scraping user sessions, or non-purpose monitoring.
+`wasm-unsafe-eval` is present only to support bundled local WebAssembly cryptographic dependencies. No WebAssembly or JavaScript is downloaded and executed from a remote host.
 
-Threat boundary (reviewer-facing):
+## Reviewer test flow
 
-- The extension **does** provide provider interoperability and wallet request routing.
-- The extension **does not** auto-approve account access, signatures, or transactions.
-- Connect/sign/send actions occur only when initiated by user interaction with a dApp and then confirmed in wallet UI.
-- Account connection, message signing, and transaction approval require explicit user interaction.
+No external test account is required.
 
-## 6) Remote code / runtime logic
+1. Install the submitted unpacked ZIP or store package.
+2. Create a temporary wallet or import a disposable test recovery phrase. Do not use a wallet containing real funds.
+3. On the analytics screen, verify both opt-in and continue-without-analytics choices are available.
+4. Verify the network selector contains only the documented Ethereum/L2 networks and Bitcoin, plus the custom EVM option.
+5. Verify account creation/import, address copying, balance display, and manual send review.
+6. Open a compatible Ethereum dApp and verify the site domain is shown before account connection, signing, or transaction approval.
+7. Verify declining a request returns a rejection and does not expose an account or sign data.
+8. Verify **Settings → General → Usage analytics** can disable future analytics.
+9. Verify there is no swap, hardware-wallet, Solana, Polkadot, Kadena, Massa, Litecoin, Dogecoin, or remote-backup interface.
 
-Extension logic is shipped in the extension package. The extension makes network/API requests for wallet operations, but is not intended to use remote code to dynamically replace extension logic at runtime.
+## Build identification
 
-## 7) Legitimate expected network traffic
+The canonical package is generated with:
 
-Expected traffic includes:
+`node packages/extension/configs/cws/release.mjs`
 
-- blockchain RPC and node infrastructure requests;
-- balance, token, NFT, and transaction history/status queries;
-- transaction broadcast/signature-related requests;
-- optional swap/buy/provider requests when user uses those features;
-- optional operational telemetry endpoints (for example analytics) according to product settings.
-
-## 8) Sensitive permission to user-feature mapping
-
-- Global site matching + injection: dApp connection/provider functionality.
-- Storage permissions: wallet persistence and state.
-- Tabs permission: wallet UX flows requiring controlled tab operations.
-- Clipboard write: explicit user copy actions.
-
-## 9) Reviewer quick assurance
-
-This extension is submitted as a wallet product, not surveillance software:
-
-- permissions are tied to wallet functionality;
-- sensitive credentials are processed locally;
-- no hidden seed/private key collection behavior is intended.
-
-## 10) CWS review build profile
-
-For Chrome Web Store review, we prepare a dedicated build profile with `VITE_CWS_REVIEW_BUILD=true` that:
-
-- keeps scope on core wallet functionality;
-- disables telemetry senders;
-- disables remote backup/sync flows.
-
-This keeps reviewer scope centered on core wallet functionality (self-custody, signing, dApp connectivity).
-
-## How to verify review-build behavior
-
-Reviewer mini-checklist:
-
-1. **Confirm build context**
-   - Verify review artifact/release notes indicate `VITE_CWS_REVIEW_BUILD=true`.
-   - Verify this build is intended as the Chrome Web Store review package.
-
-2. **Check what should be absent in review build**
-   - Telemetry event sending should be disabled.
-   - Remote backup non-core surfaces should be disabled.
-
-3. **Check what remains available (core wallet only)**
-   - Wallet create/import/unlock flows.
-   - Account view and asset/balance visibility.
-   - dApp connection request handling.
-   - User-approved signing and transaction approval flows.
-
-4. **Interpretation for CWS moderation**
-   - Review build limits extension behavior to core self-custody wallet purpose.
-   - Review build intentionally excludes non-core telemetry and remote backup flows for review clarity.
-
-## 11) CSP `wasm-unsafe-eval` clarification
-
-`wasm-unsafe-eval` remains in extension-page CSP because the wallet includes bundled local wasm crypto dependencies used by signing stacks (notably Polkadot/sr25519/ed25519 support via `@polkadot/wasm-crypto`).
-
-This capability is used for local cryptographic operations only. It is not used to fetch or execute arbitrary remote code.
-
-## 12) Trezor bundled script disclosure
-
-Trezor support is currently integrated and not removed in this change set to avoid risky cross-package refactors in hardware-wallet flows.
-
-`public/vendor/trezor-content-script.js` is a static bundled asset shipped inside the extension package (not dynamically downloaded at runtime). The script itself contains `VERSION = "9.4.1"` for Trezor Connect endpoint coordination.
-
-The extension does not use this integration as a generic remote code loader; it is scoped to Trezor-connect interoperability paths.
+That command enables `CWS_RELEASE=true` and `VITE_CWS_REVIEW_BUILD=true`, builds the exact Chrome production graph, scans the artifact, and creates `packages/extension/release/terenval-wallet-cws.zip`.

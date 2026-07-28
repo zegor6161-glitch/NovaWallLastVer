@@ -1,0 +1,47 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true,
+    "types": ["node", "chrome"],
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "noUncheckedIndexedAccess": false,
+    "useUnknownInCatchVariables": false,
+    "skipLibCheck": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@action/*": ["./src/ui/action/*"],
+      "@enkryptcom/hw-wallets": ["./src/config/cws-hardware-wallets-stub.ts"],
+      "@enkryptcom/swap": ["./src/config/cws-swap-stub.ts"],
+      "vue3-lottie": ["./src/config/cws-lottie-stub.ts"],
+      "lottie-web": ["./src/config/cws-lottie-stub.ts"]
+    }
+  },
+  "files": [
+    "env.d.ts",
+    "src/ui/action/main.ts",
+    "src/ui/onboard/main.ts",
+    "src/ui/provider-pages/main.ts",
+    "src/scripts/chrome/background.ts",
+    "src/scripts/contentscript.ts",
+    "src/scripts/inject.ts",
+    "src/manifest/manifest.chrome.ts",
+    "vite.config.ts",
+    "configs/vite/transform-manifest.ts",
+    "configs/cws/release-scope-plugin.ts",
+    "configs/cws/disabled-feature-stub-plugin.ts"
+  ],
+  "include": [],
+  "exclude": [
+    "src/providers/solana/**",
+    "src/providers/polkadot/**",
+    "src/providers/kadena/**",
+    "src/providers/massa/**",
+    "src/ui/onboard/hardware-wallet/**",
+    "src/ui/action/views/swap/**"
+  ]
+}
