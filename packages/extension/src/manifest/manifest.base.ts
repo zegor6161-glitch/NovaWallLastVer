@@ -9,7 +9,7 @@ export default {
   short_name: 'Terenval',
   description:
     'Non-custodial Ethereum, Layer 2 and Bitcoin wallet for dApp connection and transaction signing',
-  permissions: ['storage', 'unlimitedStorage', 'tabs', 'clipboardWrite'],
+  permissions: ['storage', 'tabs', 'clipboardWrite'],
   action: {
     default_icon: {
       '16': 'assets/img/icons/icon16.png',
