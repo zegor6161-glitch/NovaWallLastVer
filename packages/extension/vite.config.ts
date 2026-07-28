@@ -16,6 +16,7 @@ import wasm from 'vite-plugin-wasm';
 
 const BROWSER = process.env.BROWSER;
 const IS_CWS_BUILD = process.env.CWS_RELEASE === 'true';
+const local = (path: string) => fileURLToPath(new URL(path, import.meta.url));
 
 const firefoxChunking = (id: string) => {
   if (id.includes('node_modules')) {
@@ -109,51 +110,46 @@ export default defineConfig({
     alias: [
       ...(IS_CWS_BUILD
         ? [
-            {
-              find: 'vue3-lottie',
-              replacement: fileURLToPath(new URL('./src/config/cws-lottie-stub.ts', import.meta.url)),
-            },
-            {
-              find: 'lottie-web',
-              replacement: fileURLToPath(new URL('./src/config/cws-lottie-stub.ts', import.meta.url)),
-            },
-            {
-              find: '@enkryptcom/hw-wallets',
-              replacement: fileURLToPath(new URL('./src/config/cws-hardware-wallets-stub.ts', import.meta.url)),
-            },
-            {
-              find: '@enkryptcom/swap',
-              replacement: fileURLToPath(new URL('./src/config/cws-swap-stub.ts', import.meta.url)),
-            },
+            { find: /^@\/libs\/metrics$/, replacement: local('./src/config/cws-metrics-stub.ts') },
+            { find: /^@\/libs\/analytics$/, replacement: local('./src/config/cws-analytics-stub.ts') },
+            { find: /^@\/libs\/utils\/screening$/, replacement: local('./src/config/cws-screening-stub.ts') },
+            { find: /^@\/providers\/ethereum\/networks$/, replacement: local('./src/config/cws-ethereum-networks.ts') },
+            { find: /^@\/providers\/bitcoin\/networks$/, replacement: local('./src/config/cws-bitcoin-networks.ts') },
+            { find: /^@action\/views\/network-activity\/index\.vue$/, replacement: local('./src/config/cws-network-activity.vue') },
+            { find: /^@action\/views\/network-assets\/index\.vue$/, replacement: local('./src/config/cws-network-assets.vue') },
+            { find: 'vue3-lottie', replacement: local('./src/config/cws-lottie-stub.ts') },
+            { find: 'lottie-web', replacement: local('./src/config/cws-lottie-stub.ts') },
+            { find: '@enkryptcom/hw-wallets', replacement: local('./src/config/cws-hardware-wallets-stub.ts') },
+            { find: '@enkryptcom/swap', replacement: local('./src/config/cws-swap-stub.ts') },
           ]
         : []),
       {
         find: '@/providers/solana/libs/accounts-state',
-        replacement: fileURLToPath(new URL('./src/config/disabled-account-state.ts', import.meta.url)),
+        replacement: local('./src/config/disabled-account-state.ts'),
       },
       {
         find: '@/providers/polkadot/libs/accounts-state',
-        replacement: fileURLToPath(new URL('./src/config/disabled-account-state.ts', import.meta.url)),
+        replacement: local('./src/config/disabled-account-state.ts'),
       },
       {
         find: '@/providers/kadena/libs/accounts-state',
-        replacement: fileURLToPath(new URL('./src/config/disabled-account-state.ts', import.meta.url)),
+        replacement: local('./src/config/disabled-account-state.ts'),
       },
       {
         find: '@/providers/kadena/types',
-        replacement: fileURLToPath(new URL('./src/config/disabled-kadena-types.ts', import.meta.url)),
+        replacement: local('./src/config/disabled-kadena-types.ts'),
       },
-      { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
-      { find: '@action', replacement: fileURLToPath(new URL('./src/ui/action', import.meta.url)) },
+      { find: '@', replacement: local('./src') },
+      { find: '@action', replacement: local('./src/ui/action') },
       { find: 'fs', replacement: './configs/vite/empty.js' },
       { find: 'tiny-secp256k1', replacement: '@bitcoinerlab/secp256k1' },
       {
         find: /^@noble\/curves\/(.*)\.js$/,
-        replacement: fileURLToPath(new URL('../../crypto-libs-snapshot/@noble/curves/esm/$1.js', import.meta.url)),
+        replacement: local('../../crypto-libs-snapshot/@noble/curves/esm/$1.js'),
       },
       {
         find: /^@noble\/curves\/(.*)$/,
-        replacement: fileURLToPath(new URL('../../crypto-libs-snapshot/@noble/curves/esm/$1.js', import.meta.url)),
+        replacement: local('../../crypto-libs-snapshot/@noble/curves/esm/$1.js'),
       },
     ],
   },
