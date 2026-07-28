@@ -62,17 +62,17 @@ const targets = [
       },
       {
         from: `trackSendEvents(SendEventType.SendAPIComplete, {
-               network: network.value.name,
-             });`,
+              network: network.value.name,
+            });`,
         to: `trackSendEvents(SendEventType.SendAPIComplete, {
-               network: network.value.name,
-               amountUsdBucket: isApproval.value
-                 ? 'unknown'
-                 : bucketizeUsdAmount(Number(fiatValue.value)),
-               assetSymbol:
-                 decodedTx.value?.tokenSymbol || network.value.currencyName,
-               source: isApproval.value ? 'dapp_approval' : 'dapp_send',
-             });`,
+              network: network.value.name,
+              amountUsdBucket: isApproval.value
+                ? 'unknown'
+                : bucketizeUsdAmount(Number(fiatValue.value)),
+              assetSymbol:
+                decodedTx.value?.tokenSymbol || network.value.currencyName,
+              source: isApproval.value ? 'dapp_approval' : 'dapp_send',
+            });`,
       },
     ],
   },
